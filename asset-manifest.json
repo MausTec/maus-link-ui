@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/nogasm-ui/static/css/main.2321a0bf.chunk.css",
+    "main.css": "/nogasm-ui/static/css/main.fe5eee03.chunk.css",
     "main.js": "/nogasm-ui/static/js/main.752bcff1.chunk.js",
     "main.js.map": "/nogasm-ui/static/js/main.752bcff1.chunk.js.map",
     "runtime-main.js": "/nogasm-ui/static/js/runtime-main.7c45ce5c.js",
@@ -8,15 +8,15 @@
     "static/js/2.66e00edc.chunk.js": "/nogasm-ui/static/js/2.66e00edc.chunk.js",
     "static/js/2.66e00edc.chunk.js.map": "/nogasm-ui/static/js/2.66e00edc.chunk.js.map",
     "index.html": "/nogasm-ui/index.html",
-    "precache-manifest.2fd35a962051a1c00edf025befbc9808.js": "/nogasm-ui/precache-manifest.2fd35a962051a1c00edf025befbc9808.js",
+    "precache-manifest.4cfe53bb1c3cf81a89fe055e778a1ab4.js": "/nogasm-ui/precache-manifest.4cfe53bb1c3cf81a89fe055e778a1ab4.js",
     "service-worker.js": "/nogasm-ui/service-worker.js",
-    "static/css/main.2321a0bf.chunk.css.map": "/nogasm-ui/static/css/main.2321a0bf.chunk.css.map",
+    "static/css/main.fe5eee03.chunk.css.map": "/nogasm-ui/static/css/main.fe5eee03.chunk.css.map",
     "static/js/2.66e00edc.chunk.js.LICENSE.txt": "/nogasm-ui/static/js/2.66e00edc.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.7c45ce5c.js",
     "static/js/2.66e00edc.chunk.js",
-    "static/css/main.2321a0bf.chunk.css",
+    "static/css/main.fe5eee03.chunk.css",
     "static/js/main.752bcff1.chunk.js"
   ]
 }

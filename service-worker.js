@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/nogasm-ui/precache-manifest.2fd35a962051a1c00edf025befbc9808.js"
+  "/nogasm-ui/precache-manifest.4cfe53bb1c3cf81a89fe055e778a1ab4.js"
 );
 
 self.addEventListener('message', (event) => {
