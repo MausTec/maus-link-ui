@@ -1,0 +1,36 @@
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
+.App header {
+  height: 46px;
+  flex: 0 0 auto;
+  background-color: black;
+}
+
+.App .content {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.App .sidebar {
+  width: 200px;
+  flex: 0 0 auto;
+  background-color: rgba(0,0,0,0.2);
+}
+
+.card {
+  margin: 1.5rem;
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 2px;
+  padding: 1rem;
+}
+
+.App main {
+  flex: 1 1 auto;
+}
+
+svg {
+  overflow: visible !important;
+}
