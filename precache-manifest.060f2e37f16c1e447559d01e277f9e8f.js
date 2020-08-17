@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "04a24be1d030ba941606f1bf1d931806",
+    "revision": "bce6108fda10af1847da6b5cec44b9f7",
     "url": "/nogasm-ui/index.html"
   },
   {
-    "revision": "dd4561cff73246acd711",
+    "revision": "9b92d4523cd844a6267d",
     "url": "/nogasm-ui/static/css/main.fe5eee03.chunk.css"
   },
   {
-    "revision": "ed02191d6b876516571a",
-    "url": "/nogasm-ui/static/js/2.66e00edc.chunk.js"
+    "revision": "6594f51a6bf833fed588",
+    "url": "/nogasm-ui/static/js/2.4dca49e0.chunk.js"
   },
   {
     "revision": "406904863c710d49aa6b90ffccf78c81",
-    "url": "/nogasm-ui/static/js/2.66e00edc.chunk.js.LICENSE.txt"
+    "url": "/nogasm-ui/static/js/2.4dca49e0.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "dd4561cff73246acd711",
-    "url": "/nogasm-ui/static/js/main.752bcff1.chunk.js"
+    "revision": "9b92d4523cd844a6267d",
+    "url": "/nogasm-ui/static/js/main.53a92a7e.chunk.js"
   },
   {
     "revision": "34c67cecbdbdf68eae6e",
