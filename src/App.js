@@ -17,7 +17,12 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    // TODO: Cache deviceAddress in a cookie?
+    // "This site uses Cookies to remember your device information so you can
+    //  not orgasm even faster. Do you consent?"
+
     this.state = {
+      deviceAddress: "",
       connected: false,
       log: [],
       pressure: [],
@@ -113,29 +118,36 @@ class App extends Component {
     }
   }
 
+  handleConnect(address) {
+    this.setState({ deviceAddress: address });
+  }
+
   getLastData() {
     return (this.state.pressure.length && this.state.pressure[this.state.pressure.length - 1]) || {}
   }
 
+  // TODO: Refactor <Websocket> component into a <WebsocketProvider/> which will more gracefully
+  // handle connecting, and use a function child pattern to pass down the send() methods. Otherwise,
+  // keep the websocket connection in context? Idek, man, I just work here.
   render() {
     return (
       <div className="App">
-        <Websocket
-          url={'ws://' + this.HOST}
+        { this.state.deviceAddress && <Websocket
+          url={'ws://' + this.state.deviceAddress}
           onOpen={this.handleWsOpen.bind(this)}
           onClose={this.handleWsClose.bind(this)}
           ref={websocket => this.ws = websocket}
           debug
           onMessage={this.handleWsMessage.bind(this)}>
-        </Websocket>
+        </Websocket> }
 
-        <Header status={ this.state.status } />
+        <Header connecting={!!this.state.deviceAddress} connected={this.state.connected} onConnect={this.handleConnect.bind(this)} status={ this.state.status } />
         <div className={'content'}>
           <Sidebar />
 
           <main>
             <div className={'card'}>
-              <LEDRing pressure={ this.getLastData().pressure } arousal={ this.getLastData().arousal } limit={ this.state.settings.peakLimit } />
+              <LEDRing connected={this.state.connected} pressure={ this.getLastData().pressure } arousal={ this.getLastData().arousal } limit={ this.state.settings.peakLimit } />
             </div>
 
             <div className={'card'}>
