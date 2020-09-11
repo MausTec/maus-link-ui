@@ -151,7 +151,7 @@ class App extends Component {
             </div>
 
             <div className={'card'}>
-              {/*<Graph data={this.state.pressure} peakLimit={this.state.settings.peakLimit} />*/}
+              <Graph data={this.state.pressure} peakLimit={this.state.settings.peakLimit} />
             </div>
 
             <div className={'controls'}>
