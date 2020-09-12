@@ -159,9 +159,17 @@ class App extends Component {
           <Sidebar />
 
           <main>
-            <div className={'card'}>
-              <LEDRing connected={this.state.connected} pressure={ this.getLastData().pressure } arousal={ this.getLastData().arousal } limit={ this.state.settings.peakLimit } />
-              <LCDDisplay data={this.state.lcdData} />
+            <div className={'row'}>
+              <div className={'col s12 m6'}>
+                <div className={'card'}>
+                  <LEDRing connected={this.state.connected} pressure={ this.getLastData().pressure } arousal={ this.getLastData().arousal } limit={ this.state.settings.peakLimit } />
+                </div>
+              </div>
+              <div className={'col s12 m6'}>
+                <div className={'card'}>
+                  <LCDDisplay data={this.state.lcdData} />
+                </div>
+              </div>
             </div>
 
             <div className={'card'}>

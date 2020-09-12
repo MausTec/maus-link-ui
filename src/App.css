@@ -21,7 +21,6 @@
 }
 
 .card {
-  margin: 1.5rem;
   background-color: rgba(0,0,0,0.1);
   border-radius: 2px;
   padding: 1rem;
@@ -29,8 +28,38 @@
 
 .App main {
   flex: 1 1 auto;
+  padding: 1.5rem;
 }
 
 svg {
   overflow: visible !important;
+}
+
+.row {
+  margin: 0 -0.75rem;
+}
+
+.row > .col {
+  padding: 0 0.75rem;
+  float: left;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+}
+
+.col > .card {
+  margin: 0;
+}
+
+.col.m6 {
+  width: 50%;
+}
+
+.col.m4 {
+  width: 33.33%;
+}
+
+.row:after {
+  content: "";
+  display: block;
+  clear: both;
 }

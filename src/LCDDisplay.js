@@ -5,6 +5,9 @@ const LCDDisplay = ({data = ""}) => {
   const height = 64;
   const colHeight = Math.floor((height + 7) / 8);
 
+  const offColor = "black";
+  const onColor = "cyan";
+
   let pages = [];
 
   for (let page = 0; page < height / colHeight; page++) {
@@ -22,10 +25,10 @@ const LCDDisplay = ({data = ""}) => {
       for (let row = 0; row < 8; row++) {
         const bit = !!(byte & (1 << (7 - (row % 8))));
         rows.push(<div key={"p" + page + "c" + column + "r" + row} className={'pixel'} style={{
-          border: "1px solid black",
+          border: "1px solid " + offColor,
           borderTop: "none",
           borderLeft: "none",
-          backgroundColor: (bit ? "green" : "black"),
+          backgroundColor: (bit ? onColor : offColor),
           width: 3,
           height: 3
         }}/>);
@@ -42,8 +45,8 @@ const LCDDisplay = ({data = ""}) => {
   return (
     <div className={'lcd'} style={{
       backgroundColor: 'black',
-      borderTop: "1px solid black",
-      borderLeft: "1px solid black",
+      borderTop: "1px solid " + offColor,
+      borderLeft: "1px solid " + offColor,
       display: 'inline-block', width: 'auto'
     }}>
       {pages}
