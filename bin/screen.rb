@@ -2,6 +2,7 @@
 
 require 'rmagick'
 require 'rubyserial'
+require 'fileutils'
 
 def save_screenshot(buffer_data)
   puts "Got #{buffer_data.length / 2} bytes."
@@ -44,9 +45,9 @@ def save_screenshot(buffer_data)
 
   data = pages#.transpose
 
-  scale = 5
-  foreground = [0,255,255]
-  background = [0,0,0]
+  scale = 10
+  foreground = [0,0,0]
+  background = [255,255,255]
 
   padding = scale * 2
   img = Magick::Image.new(width*scale+padding, height*scale+padding)
@@ -118,10 +119,19 @@ def dispatch_serial(line)
   puts line
 end
 
-serial.gets do |line|
-  if line =~ /[A-Za-z0-9]{120,}/
-    save_screenshot(line.chomp)
-  else
-    puts line
+read_thr = Thread.new do
+  serial.gets do |line|
+    if line =~ /[A-Za-z0-9]{120,}/
+      save_screenshot(line.chomp)
+    else
+      puts line
+    end
   end
 end
+
+while (line = gets)
+  serial.write line
+end
+
+serial.close
+read_thr.join
