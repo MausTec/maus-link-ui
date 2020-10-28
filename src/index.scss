@@ -1,0 +1,70 @@
+@import '~materialize-css/sass/components/_color-variables.scss';
+
+$primary-color: #308cb3 !default;
+$secondary-color: color('cyan', 'accent-2') !default;
+
+$text-color: color('grey', 'lighten-3') !default;
+$page-bg-color: color('grey', 'darken-4') !default;
+$card-bg-color: lighten($page-bg-color, 3%) !default;
+
+$sidenav-bg-color: $card-bg-color;
+$sidenav-font-color: $text-color;
+
+
+$sidenav-z: 999;
+
+@import '~materialize-css/sass/materialize.scss';
+
+html {
+  background-color: $page-bg-color;
+  color: $text-color;
+}
+
+.App > nav {
+  position: relative;
+  z-index: $sidenav-z + 1;
+}
+
+.sidenav {
+  margin-top: $navbar-height;
+  z-index: $sidenav-z;
+  $background-opacity: 0.6;
+
+  .background {
+    background-color: $primary-color-dark;
+    background:
+            black
+            radial-gradient(circle at 20px -10px,
+                    rgba($primary-color, $background-opacity) 0%,
+                    rgba($primary-color, $background-opacity) 60%,
+                    rgba($primary-color, $background-opacity + 0.2) 60.1%
+            );
+
+    img {
+      height: 100%;
+      float: right;
+      padding: 1rem;
+      opacity: 0.2;
+    }
+  }
+
+  .subheader {
+    color: darken($sidenav-font-color, 50%);
+  }
+
+  .divider {
+    background-color: lighten($sidenav-bg-color, 10%);
+  }
+
+  li > a > i.material-icons.prefix {
+    color: darken($sidenav-font-color, 50%);
+  }
+
+  li > a:hover {
+    background-color: lighten($sidenav-bg-color, 5%);
+  }
+}
+
+.App > .content {
+  margin-left: $sidenav-width;
+}

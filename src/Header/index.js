@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+import Logo from '../assets/MT_Logo_White_64h.png';
+import {Icon, Navbar, NavItem} from "react-materialize";
 
 const wifiStrength = (rssi) => {
   if (rssi < -90) {
@@ -26,6 +28,32 @@ const Header = (props) => {
     e.preventDefault();
     onConnect(address);
   };
+
+  return(
+    <Navbar
+      alignLinks="right"
+      brand={<a className="brand-logo" href="#" style={{ paddingLeft: '1rem' }}>
+        <img src={Logo} height={24} width={165} />
+      </a>}
+      id="mobile-nav"
+      menuIcon={<Icon>menu</Icon>}
+      options={{
+        draggable: true,
+        edge: 'left',
+        inDuration: 250,
+        onCloseEnd: null,
+        onCloseStart: null,
+        onOpenEnd: null,
+        onOpenStart: null,
+        outDuration: 200,
+        preventScrolling: true
+      }}
+    >
+      <NavItem href="">
+        Getting started
+      </NavItem>
+    </Navbar>
+  );
 
   if (!connected) {
     if (connecting) {

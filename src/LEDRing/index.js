@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import './index.css'
+import {DeviceContext} from "../DeviceProvider";
 
 const radius = 300;
 const ledCount = 13;
@@ -14,7 +15,17 @@ const map = (num, in_min, in_max, out_min, out_max) => {
 };
 
 const LEDRing = (props) => {
-  const { pressure, arousal, limit } = props;
+  const context = useContext(DeviceContext);
+  const {
+    lastReading: {
+      pressure = 0,
+      arousal = 0,
+    },
+    config: {
+      peakLimit: limit = 4096
+    }
+  } = context;
+
   const pressureIdx = Math.floor(map(pressure, 0, 4096, 0, ledCount - 1));
   const limitIdx = Math.floor(map(limit, 0, 4096, 0, ledCount - 1));
   const arousalIdx = Math.floor(map(arousal, 0, limit, 0, ledCount - 1));
@@ -46,7 +57,7 @@ const LEDRing = (props) => {
   }
 
   return (
-    <div className={'led-ring'} style={{ width: radius, height: radius }}>
+    <div className={'led-ring'} style={{ width: radius, height: radius, ...props.style }}>
       { leds.map((led, i) =>
         <div className={'led led-' + i} key={i} style={{
           backgroundColor: led.color,
