@@ -22,7 +22,7 @@ const LEDRing = (props) => {
       arousal = 0,
     },
     config: {
-      peakLimit: limit = 4096
+      sensitivity_threshold: limit = 0
     }
   } = context;
 

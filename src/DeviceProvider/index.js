@@ -80,7 +80,7 @@ class DeviceProvider extends Component {
   }
 
   cbConfigList(config) {
-    this.setState({ config })
+    this.setState({ config });
   }
 
   cbSerialCmd({ text, nonce }) {
@@ -141,6 +141,7 @@ class DeviceProvider extends Component {
     this.setState({state: 'connected'});
     this.send({ streamReadings: true });
     this.send({ info: null });
+    this.send({ configList: null });
     console.log("Connected");
   }
 

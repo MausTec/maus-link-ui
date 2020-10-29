@@ -9,21 +9,21 @@ const Stats = () => {
   const [mode, setMode] = useState(context.mode);
 
   const onSensitivityChange = (add) => {
-    let { pressureSensitivity = 0 } = context.config;
-    pressureSensitivity += add;
+    let { sensor_sensitivity = 0 } = context.config;
+    sensor_sensitivity += add;
     context.send({
       configSet: {
-        pressureSensitivity
+        sensor_sensitivity
       }
     });
   };
 
   const onPeakLimitChange = (add) => {
-    let { peakLimit = 0 } = context.config;
-    peakLimit += add;
+    let { sensivitiy_threshold = 0 } = context.config;
+    sensivitiy_threshold += add;
     context.send({
       configSet: {
-        peakLimit
+        sensivitiy_threshold
       }
     });
   };
@@ -39,7 +39,7 @@ const Stats = () => {
     <div className={'row'}>
       <div className={'col s12 m3'}>
         <Stat name={"Pressure"} value={context.lastReading.pavg} />
-        <Stat name={"Sensitivity"} onChange={ onSensitivityChange } value={context.config.pressureSensitivity} style={{ marginTop: '5rem' }}/>
+        <Stat name={"Sensitivity"} onChange={ onSensitivityChange } value={context.config.sensor_sensitivity} style={{ marginTop: '5rem' }}/>
       </div>
 
       <div className={'col s12 m6'}>
@@ -60,7 +60,7 @@ const Stats = () => {
 
       <div className={'col s12 m3'}>
         <Stat name={"Speed"} value={context.lastReading.motor} />
-        <Stat name={"Arousal Limit"} onChange={ onPeakLimitChange } value={context.config.peakSensitivity} style={{ marginTop: '5rem' }}/>
+        <Stat name={"Arousal Limit"} onChange={ onPeakLimitChange } value={context.config.sensitivity_threshold} style={{ marginTop: '5rem' }}/>
       </div>
     </div>
   )
