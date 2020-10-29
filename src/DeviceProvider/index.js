@@ -1,9 +1,38 @@
 import React, {Component} from 'react';
 import Websocket from "react-websocket";
 
-const DeviceContext = React.createContext({
+export const DeviceMode = {
+  MANUAL: "manual",
+  AUTOMATIC: "automatic"
+};
+
+export const ConnectionState = {
+  DISCONNECTED: "disconnected",
+  CONNECTING: "connecting",
+  CONNECTED: "connected"
+};
+
+const defaultState = {
   ip: null,
-  state: 'disconnected',
+  state: ConnectionState.DISCONNECTED,
+  config: {},
+  readings: [],
+  lastReading: {},
+  info: {
+    deviceName: "",
+    firmwareVersion: "",
+    hardwareVersion: "",
+    deviceSerial: ""
+  },
+  status: {
+    wifi: {},
+    sd: {}
+  },
+  _ws_log: []
+};
+
+const DeviceContext = React.createContext({
+  ...defaultState,
   connect: (ip) => {},
   send: (data) => {}
 });
@@ -15,23 +44,9 @@ class DeviceProvider extends Component {
     this.ws = null;
 
     this.state = {
-      ip: null,
-      state: 'disconnected',
+      ...defaultState,
       connect: this.connect.bind(this),
-      send: this.send.bind(this),
-      config: {},
-      readings: [],
-      lastReading: {},
-      info: {
-        deviceName: "",
-        firmwareVersion: "",
-        hardwareVersion: "",
-        deviceSerial: ""
-      },
-      status: {
-        wifi: {},
-        sd: {}
-      }
+      send: this.send.bind(this)
     };
 
     /**
@@ -105,6 +120,7 @@ class DeviceProvider extends Component {
 
   send(data) {
     if (this.ws) {
+      this.setState({ _ws_log: [ ...this.state._ws_log, {send: data} ]});
       this.ws.sendMessage(JSON.stringify(data));
     }
   }
@@ -136,13 +152,15 @@ class DeviceProvider extends Component {
   handleWsMessage(data) {
     const _this = this;
     let doc;
-
     try {
       doc = JSON.parse(data);
     } catch(e) {
       doc = { data };
       console.warn(e);
     }
+
+    if (!doc.readings)
+      this.setState({ _ws_log: [ ...this.state._ws_log, {recv: data} ]});
 
     Object.keys(doc).map(cmd => {
       if (this.callbacks[cmd]) {

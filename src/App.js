@@ -7,8 +7,10 @@ import LEDRing from "./LEDRing";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import LCDDisplay from './LCDDisplay';
-import {Container} from "react-materialize";
+import {Button, Container, Icon} from "react-materialize";
 import DeviceProvider from "./DeviceProvider";
+import Stats from "./Stats";
+import WSConsole from "./DeviceProvider/WSConsole";
 
 class App extends Component {
   constructor(props) {
@@ -25,20 +27,8 @@ class App extends Component {
             <Sidebar />
 
             <main>
-              <Container style={{ width: 330 * 3, marginTop: '1.5rem' }}>
-                <div className={'row'}>
-                  <div className={'col s12 m3'}>
-                    Pressure
-                  </div>
-
-                  <div className={'col s12 m6'}>
-                    <LEDRing style={{ margin: '0 auto' }} />
-                  </div>
-
-                  <div className={'col s12 m3'}>
-                    Denial Count
-                  </div>
-                </div>
+              <Container style={{ marginTop: '3rem' }}>
+                <Stats />
 
                 <div className={'row'}>
                   <div className={'col s12'}>
@@ -47,6 +37,11 @@ class App extends Component {
                         <Graph />
                       </div>
                     </div>
+                  </div>
+                </div>
+                <div className={'row'}>
+                  <div className={'col s12'}>
+                    <WSConsole />
                   </div>
                 </div>
               </Container>

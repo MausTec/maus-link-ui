@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import './index.css'
+import './index.scss'
 import {DeviceContext} from "../DeviceProvider";
 
 const radius = 300;
@@ -68,8 +68,9 @@ const LEDRing = (props) => {
           opacity: (led.glow ? 1.0 : 0.8)
         }} />)}
 
-      <div className={'led-value'}>{ Math.floor(arousal / limit * 100) }%</div>
-      <div className={'led-stat'}>Arousal</div>
+      {/*<div className={'led-value'}>{ Math.floor(arousal / limit * 100) }%</div>*/}
+      {/*<div className={'led-stat'}>Arousal</div>*/}
+      { props.children }
     </div>
   )
 };

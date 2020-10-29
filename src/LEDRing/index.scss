@@ -1,0 +1,42 @@
+.led-ring {
+    position: relative;
+    margin: 15px;
+
+    .led {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        color: black;
+        font-size: 0.7rem;
+        transform: translate(-50%, -50%) rotate(45deg);
+        border-radius: 3px;
+        transition: all 0.1s ease;
+    }
+
+    .led:before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 3px;
+        top: 3px;
+        bottom: 3px;
+        right: 3px;
+        background-color: rgba(0,0,0,0.25);
+        border-radius: 50%;
+        box-shadow: 0 0 5px 3px rgba(0,0,0,0.2);
+    }
+
+    .led-value, .stat-value {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .led-stat, .stat-heading {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
