@@ -29,13 +29,15 @@ const defaultState = {
     wifi: {},
     sd: {}
   },
-  _ws_log: []
+  _ws_log: [],
+  _serial_cb: () => {}
 };
 
 const DeviceContext = React.createContext({
   ...defaultState,
   connect: (ip) => {},
-  send: (data) => {}
+  send: (data) => {},
+  onSerialCmd: (fn) => {},
 });
 
 class DeviceProvider extends Component {
@@ -47,7 +49,8 @@ class DeviceProvider extends Component {
     this.state = {
       ...defaultState,
       connect: this.connect.bind(this),
-      send: this.send.bind(this)
+      send: this.send.bind(this),
+      onSerialCmd: this.setSerialCb.bind(this)
     };
 
     /**
@@ -63,8 +66,6 @@ class DeviceProvider extends Component {
       readings: this.cbReadings,
       mode: this.cbMode
     };
-
-    this.nonceQueue = {};
   }
 
   /*
@@ -86,10 +87,8 @@ class DeviceProvider extends Component {
   }
 
   cbSerialCmd({ text, nonce }) {
-    const cb = this.nonceQueue[nonce];
-    if (cb) {
-      cb(text);
-      delete this.nonceQueue[nonce];
+    if (this.state._serial_cb) {
+      this.state._serial_cb({ text, nonce });
     }
   }
 
@@ -176,6 +175,10 @@ class DeviceProvider extends Component {
         console.warn("Received unknown command from device: ", cmd, doc[cmd]);
       }
     })
+  }
+
+  setSerialCb(fn) {
+    this.setState({ _serial_cb: fn });
   }
 
   render() {

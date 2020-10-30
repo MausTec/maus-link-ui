@@ -3,9 +3,10 @@ import React, {Component} from 'react';
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import DeviceProvider from "./DeviceProvider";
-import Dashboard from "./Dashboard";
+import Dashboard from "./pages/Dashboard.js";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import Console from "./pages/Console";
+import Settings from "./pages/Settings";
 
 class App extends Component {
   constructor(props) {
@@ -14,21 +15,21 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{ minHeight: '100vh'}}>
         <BrowserRouter>
           <DeviceProvider>
             <Header />
 
-            <div className={'content'}>
+            <div className={'content'} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
               <Sidebar />
 
-              <main>
+              <main style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
                 <Switch>
                   <Route exact path={'/'}>
                     <Dashboard />
                   </Route>
                   <Route path={'/settings'}>
-                    <h1>Settings.</h1>
+                    <Settings />
                   </Route>
                   <Route path={'/console'}>
                     <Console />

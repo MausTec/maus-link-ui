@@ -6,7 +6,6 @@ import {Switch} from "react-materialize";
 
 const Stats = () => {
   const context = useContext(DeviceContext);
-  const [mode, setMode] = useState(context.mode);
 
   const onSensitivityChange = (add) => {
     let { sensor_sensitivity = 0 } = context.config;
@@ -28,13 +27,6 @@ const Stats = () => {
     });
   };
 
-  const onModeChange = (e) => {
-    const auto = e.target.checked;
-    const mode = auto ? DeviceMode.AUTOMATIC : DeviceMode.MANUAL;
-    setMode(mode);
-    context.send({ setMode: mode });
-  };
-
   const pavg = context.lastReading.pavg || 0;
   const sens = context.config.sensor_sensitivity;
   const p_kpa_max = Math.floor(100 * ((255 - sens) / 255));
@@ -52,16 +44,6 @@ const Stats = () => {
         <LEDRing style={{ margin: '15px auto' }}>
           <Stat name={"Arousal"} value={context.lastReading.arousal} flipped />
         </LEDRing>
-
-        <div className={'center'}>
-          <Switch
-            id="ModeSwitch"
-            offLabel="Manual"
-            onChange={onModeChange}
-            onLabel="Automatic"
-            checked={mode === "automatic"}
-          />
-        </div>
       </div>
 
       <div className={'col s12 m3'}>

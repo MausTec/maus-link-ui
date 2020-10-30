@@ -28,7 +28,7 @@ const Header = (props) => {
     <Navbar
       alignLinks="right"
       brand={<React.Fragment>
-        <a className="brand-logo" href="#" style={{ paddingLeft: '1rem' }}>
+        <a className="brand-logo" href="#">
           <img alt="Maus-Tec Logo" src={Logo} height={18} />
         </a>
         <div className={'status'}>
@@ -49,8 +49,8 @@ const Header = (props) => {
         preventScrolling: true
       }}
     >
-      <NavItem href="">
-        Getting started
+      <NavItem href="" icon={<Icon>wifi</Icon>}>
+        { context.status.wifi.ssid }
       </NavItem>
     </Navbar>
   );

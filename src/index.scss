@@ -1,7 +1,7 @@
 @import '~materialize-css/sass/components/_color-variables.scss';
 
 $primary-color: #308cb3 !default;
-$secondary-color: color('light-blue', 'accent-2') !default;
+$secondary-color: #1F5A73 !default;
 
 $text-color: color('grey', 'lighten-3') !default;
 $page-bg-color: color('grey', 'darken-4') !default;
@@ -10,9 +10,19 @@ $card-bg-color: lighten($page-bg-color, 3%) !default;
 $sidenav-bg-color: $card-bg-color;
 $sidenav-font-color: $text-color;
 
+$input-disabled-solid-color: color('grey', 'darken-3');
+$button-disabled-background: $input-disabled-solid-color;
+$input-disabled-color: color('grey', 'darken-1');
+$button-disabled-color: $input-disabled-color;
+
 $sidenav-z: 999;
 
 @import '~materialize-css/sass/materialize.scss';
+
+.block {
+  display: block;
+  width: 100%;
+}
 
 .primary-text {
   color: $primary-color !important;
