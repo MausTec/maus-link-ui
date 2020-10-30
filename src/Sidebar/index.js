@@ -3,6 +3,7 @@ import {Button, Icon, SideNav, SideNavItem} from "react-materialize";
 import blueprint from '../assets/EoM_Blueprint.svg';
 import Connect from "../DeviceProvider/Connect";
 import {DeviceContext} from "../DeviceProvider";
+import {NavLink} from "react-router-dom";
 
 const Sidebar = () => {
   const context = useContext(DeviceContext);
@@ -33,19 +34,9 @@ const Sidebar = () => {
       </SideNavItem>}
 
       { connected && <React.Fragment>
-        <SideNavItem
-          href="#!dashboard"
-          icon={<Icon>dashboard</Icon>}
-        >
-          Dashboard
-        </SideNavItem>
-
-        <SideNavItem
-          href="#!dashboard"
-          icon={<Icon>settings</Icon>}
-        >
-          Settings
-        </SideNavItem>
+        <li><NavLink to={"/"} exact activeClassName={'primary-dark white-text'}><Icon className={'prefix'}>dashboard</Icon> Dashboard</NavLink></li>
+        <li><NavLink to={"/settings"} activeClassName={'primary-dark white-text'}><Icon className={'prefix'}>settings</Icon> Settings</NavLink></li>
+        <li><NavLink to={"/console"} activeClassName={'primary-dark white-text'}><Icon className={'prefix'}>code</Icon> Serial Console</NavLink></li>
       </React.Fragment> }
 
       {/*<SideNavItem href="#!second">*/}

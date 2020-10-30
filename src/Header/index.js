@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import Logo from '../assets/MT_Logo_White_64h.png';
 import {Icon, Navbar, NavItem} from "react-materialize";
+import {DeviceContext} from "../DeviceProvider";
 
 const wifiStrength = (rssi) => {
   if (rssi < -90) {
@@ -21,20 +22,19 @@ const wifiStrength = (rssi) => {
 };
 
 const Header = (props) => {
-  const { status, connected, onConnect, connecting, defaultAddress = "" } = props;
-  const [address, setAddress] = useState(defaultAddress);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onConnect(address);
-  };
+  const context = useContext(DeviceContext);
 
   return(
     <Navbar
       alignLinks="right"
-      brand={<a className="brand-logo" href="#" style={{ paddingLeft: '1rem' }}>
-        <img src={Logo} height={24} width={165} />
-      </a>}
+      brand={<React.Fragment>
+        <a className="brand-logo" href="#" style={{ paddingLeft: '1rem' }}>
+          <img alt="Maus-Tec Logo" src={Logo} height={18} />
+        </a>
+        <div className={'status'}>
+          { context.mode }
+        </div>
+      </React.Fragment>}
       id="mobile-nav"
       menuIcon={<Icon>menu</Icon>}
       options={{
@@ -54,34 +54,6 @@ const Header = (props) => {
       </NavItem>
     </Navbar>
   );
-
-  if (!connected) {
-    if (connecting) {
-      return (
-        <header className={"App-header"}>
-          <span>Connecting to {address}...</span>
-        </header>
-      )
-    }
-
-    return (
-      <header className={"App-header"}>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor={'device-address'}>Device Address: </label>
-          <input id={'device-address'} onChange={e => setAddress(e.target.value)} value={address} />
-          <button type={"submit"}>Connect</button>
-        </form>
-      </header>
-    )
-  }
-
-  return (
-    <header className="App-header">
-      <span className={"ssid"}>{ status.ssid }</span>{' '}
-      <span className={"ip"}>{ status.ip }</span>{' '}
-      <span className={"strength"}>({ wifiStrength(status.signalStrength) })</span>
-    </header>
-  )
 };
 
 export default Header;

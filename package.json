@@ -12,6 +12,7 @@
     "react-charts": "^2.0.0-beta.7",
     "react-dom": "^16.13.1",
     "react-materialize": "^3.9.3",
+    "react-measure": "^2.5.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "react-websocket": "^2.1.0",

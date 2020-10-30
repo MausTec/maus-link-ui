@@ -18,6 +18,7 @@ const defaultState = {
   config: {},
   readings: [],
   lastReading: {},
+  mode: "",
   info: {
     deviceName: "",
     firmwareVersion: "",
@@ -59,7 +60,8 @@ class DeviceProvider extends Component {
       serialCmd: this.cbSerialCmd,
       wifiStatus: this.cbWifiStatus,
       sdStatus: this.cbSdStatus,
-      readings: this.cbReadings
+      readings: this.cbReadings,
+      mode: this.cbMode
     };
 
     this.nonceQueue = {};
@@ -112,6 +114,10 @@ class DeviceProvider extends Component {
       readings: readings,
       lastReading: data
     });
+  }
+
+  cbMode(data) {
+    this.setState({ mode: data.text });
   }
 
   /*

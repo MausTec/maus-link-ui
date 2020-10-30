@@ -15,7 +15,19 @@ $sidenav-z: 999;
 @import '~materialize-css/sass/materialize.scss';
 
 .primary-text {
-  color: $primary-color;
+  color: $primary-color !important;
+}
+
+.primary {
+  background-color: $primary-color !important;
+}
+
+.primary-dark {
+  background-color: $primary-color-dark !important;
+}
+
+.primary-light {
+  background-color: $primary-color-light !important;
 }
 
 input, textarea {
@@ -23,11 +35,11 @@ input, textarea {
 }
 
 .primary-light-text {
-  color: $primary-color-light;
+  color: $primary-color-light !important;
 }
 
 .primary-dark-text {
-  color: $primary-color-dark;
+  color: $primary-color-dark !important;
 }
 
 html {
@@ -39,6 +51,26 @@ html {
   position: fixed;
   top: 0;
   z-index: $sidenav-z + 1;
+  background-color: $primary-color-dark;
+
+  .status {
+    height: $navbar-height;
+    margin-left: $sidenav-width;
+    padding-left: 1.5rem;
+    font-size: 1.2rem;
+    float: left;
+  }
+
+  .brand-logo {
+    width: $sidenav-width;
+    background-color: $primary-color;
+    height: $navbar-height;
+
+    img {
+      display: block;
+      margin: ($navbar-height - 18px) / 2 auto 0;
+    }
+  }
 }
 
 .App main {
@@ -78,6 +110,10 @@ html {
 
   li > a > i.material-icons.prefix {
     color: darken($sidenav-font-color, 50%);
+  }
+
+  li > a.primary-dark > i.material-icons.prefix {
+    color: $primary-color-light;
   }
 
   li > a:hover {

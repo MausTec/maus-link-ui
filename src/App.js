@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
-import Graph from './Graph'
 
-import Websocket from 'react-websocket';
-
-import LEDRing from "./LEDRing";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import LCDDisplay from './LCDDisplay';
-import {Button, Container, Icon} from "react-materialize";
 import DeviceProvider from "./DeviceProvider";
-import Stats from "./Stats";
-import WSConsole from "./DeviceProvider/WSConsole";
+import Dashboard from "./Dashboard";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+import Console from "./pages/Console";
 
 class App extends Component {
   constructor(props) {
@@ -20,34 +15,29 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <DeviceProvider>
-          <Header />
+        <BrowserRouter>
+          <DeviceProvider>
+            <Header />
 
-          <div className={'content'}>
-            <Sidebar />
+            <div className={'content'}>
+              <Sidebar />
 
-            <main>
-              <Container style={{ marginTop: '3rem' }}>
-                <Stats />
-
-                <div className={'row'}>
-                  <div className={'col s12'}>
-                    <div className={'card'}>
-                      <div className={'card-content'}>
-                        <Graph />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={'row'}>
-                  <div className={'col s12'}>
-                    <WSConsole />
-                  </div>
-                </div>
-              </Container>
-            </main>
-          </div>
-        </DeviceProvider>
+              <main>
+                <Switch>
+                  <Route exact path={'/'}>
+                    <Dashboard />
+                  </Route>
+                  <Route path={'/settings'}>
+                    <h1>Settings.</h1>
+                  </Route>
+                  <Route path={'/console'}>
+                    <Console />
+                  </Route>
+                </Switch>
+              </main>
+            </div>
+          </DeviceProvider>
+        </BrowserRouter>
       </div>
     );
   }
