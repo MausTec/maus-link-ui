@@ -6,7 +6,8 @@ import {ConnectionState} from "./index";
 
 const Connect = (props) => {
   const context = useContext(DeviceContext);
-  const [ip, setIp] = useState(null);
+  console.log(context);
+  const [ip, setIp] = useState(context.ip);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard.js";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import Console from "./pages/Console";
 import Settings from "./pages/Settings";
+import Buttplug from "./pages/Buttplug";
 
 class App extends Component {
   constructor(props) {
@@ -33,6 +34,9 @@ class App extends Component {
                   </Route>
                   <Route path={'/console'}>
                     <Console />
+                  </Route>
+                  <Route path={'/connect'}>
+                    <Buttplug />
                   </Route>
                 </Switch>
               </main>

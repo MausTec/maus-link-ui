@@ -48,8 +48,12 @@ class DeviceProvider extends Component {
 
     this.ws = null;
 
+    const defaultIP = window.location.hash && window.location.hash.substring(1);
+
     this.state = {
       ...defaultState,
+      ip: defaultIP,
+      state: defaultIP ? ConnectionState.CONNECTING : ConnectionState.DISCONNECTED,
       connect: this.connect.bind(this),
       send: this.send.bind(this),
       onSerialCmd: this.setSerialCb.bind(this)
@@ -201,7 +205,7 @@ class DeviceProvider extends Component {
           debug
           onMessage={this.handleWsMessage.bind(this)}>
         </Websocket> }
-
+        {/*{ this.props.children }*/}
         { this.state.state === ConnectionState.CONNECTED && this.props.children }
         { this.state.state !== ConnectionState.CONNECTED && <Connect /> }
       </DeviceContext.Provider>
