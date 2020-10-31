@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Websocket from "react-websocket";
+import Connect from "./Connect";
 
 export const DeviceMode = {
   MANUAL: "manual",
@@ -201,7 +202,8 @@ class DeviceProvider extends Component {
           onMessage={this.handleWsMessage.bind(this)}>
         </Websocket> }
 
-        { this.props.children }
+        { this.state.state === ConnectionState.CONNECTED && this.props.children }
+        { this.state.state !== ConnectionState.CONNECTED && <Connect /> }
       </DeviceContext.Provider>
     )
   }
