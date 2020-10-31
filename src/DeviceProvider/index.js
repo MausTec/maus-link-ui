@@ -19,6 +19,7 @@ const defaultState = {
   readings: [],
   lastReading: {},
   mode: "",
+  modeDisplay: "",
   info: {
     deviceName: "",
     firmwareVersion: "",
@@ -116,7 +117,7 @@ class DeviceProvider extends Component {
   }
 
   cbMode(data) {
-    this.setState({ mode: data.text });
+    this.setState({ mode: data.text.toLowerCase(), modeDisplay: data.text });
   }
 
   /*
@@ -165,8 +166,15 @@ class DeviceProvider extends Component {
       console.warn(e);
     }
 
-    if (!doc.readings)
-      this.setState({ _ws_log: [ ...this.state._ws_log, {recv: data} ]});
+    if (!doc.readings) {
+      let _ws_log = [...this.state._ws_log];
+
+      if (_ws_log.length >= 100) {
+        _ws_log.shift();
+      }
+
+      this.setState({_ws_log: [_ws_log, {recv: data}]});
+    }
 
     Object.keys(doc).map(cmd => {
       if (this.callbacks[cmd]) {

@@ -6,13 +6,29 @@ import {DeviceContext, DeviceMode} from "../DeviceProvider";
 
 const Dashboard = () => {
   const context = useContext(DeviceContext);
-  const [mode, setMode] = useState(context.mode);
 
   const onModeChange = (e) => {
     const auto = e.target.checked;
     const mode = auto ? DeviceMode.AUTOMATIC : DeviceMode.MANUAL;
-    setMode(mode);
     context.send({ setMode: mode });
+  };
+
+  const onStop = (e) => {
+    e.preventDefault();
+
+    context.send({
+      setMode: DeviceMode.MANUAL,
+      setMotor: 0
+    });
+  };
+
+  const onJizzumPermitted = (e) => {
+    e.preventDefault();
+
+    context.send({
+      setMode: DeviceMode.MANUAL,
+      setMotor: 255
+    });
   };
 
   return (
@@ -21,7 +37,7 @@ const Dashboard = () => {
 
       <div className={'row'} style={{ marginTop: '3rem' }}>
         <div className={'col s12 m4'}>
-          <Button large disabled={ context.lastReading.motor === 0} className={'red darken-2 block'}>STOP!</Button>
+          <Button onClick={onStop} large disabled={ context.lastReading.motor === 0} className={'red darken-2 block'}>STOP!</Button>
         </div>
         <div className={'col s12 m4'}>
           <div className={'center'} style={{ lineHeight: '54px' }}>
@@ -30,12 +46,12 @@ const Dashboard = () => {
               offLabel="Manual"
               onChange={onModeChange}
               onLabel="Automatic"
-              checked={mode === "automatic"}
+              checked={context.mode === DeviceMode.AUTOMATIC}
             />
           </div>
         </div>
         <div className={'col s12 m4'}>
-          <Button large disabled={ context.mode !== 'Automatic' } className={'green darken-2 block'}>Allow Orgasm</Button>
+          <Button onClick={onJizzumPermitted} large disabled={ context.mode !== DeviceMode.AUTOMATIC } className={'green darken-2 block'}>Allow Orgasm</Button>
         </div>
       </div>
 

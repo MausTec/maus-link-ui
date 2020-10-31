@@ -32,7 +32,7 @@ const Header = (props) => {
           <img alt="Maus-Tec Logo" src={Logo} height={18} />
         </a>
         <div className={'status'}>
-          { context.mode }
+          { context.modeDisplay }
         </div>
       </React.Fragment>}
       id="mobile-nav"

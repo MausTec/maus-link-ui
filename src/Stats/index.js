@@ -27,6 +27,14 @@ const Stats = () => {
     });
   };
 
+  const onSpeedChange = (add) => {
+    let { motor = 0 } = context.lastReading;
+    motor += add;
+    context.send({
+      setMotor: motor
+    });
+  };
+
   const pavg = context.lastReading.pavg || 0;
   const sens = context.config.sensor_sensitivity;
   const p_kpa_max = Math.floor(100 * ((255 - sens) / 255));
@@ -42,12 +50,12 @@ const Stats = () => {
 
       <div className={'col s12 m6'}>
         <LEDRing style={{ margin: '15px auto' }}>
-          <Stat name={"Arousal"} value={context.lastReading.arousal} flipped />
+          <Stat name={"Arousal"} value={context.lastReading.arousal} flipped max={ context.config.sensitivity_threshold } round />
         </LEDRing>
       </div>
 
       <div className={'col s12 m3'}>
-        <Stat name={"Speed"} value={(context.lastReading.motor / 255) * 100} round unit={'%'} />
+        <Stat name={"Speed"} onChange={ context.mode === DeviceMode.MANUAL ? onSpeedChange : undefined } step={ 7 } value={(context.lastReading.motor / 255) * 100} round unit={'%'} />
         <Stat name={"Arousal Limit"} onChange={ onPeakLimitChange } value={context.config.sensitivity_threshold} style={{ marginTop: '5rem' }}/>
       </div>
     </div>
