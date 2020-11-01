@@ -42,6 +42,11 @@ const DeviceContext = React.createContext({
   onSerialCmd: (fn) => {},
 });
 
+const ReadingsContext = React.createContext({
+  readings: [],
+  lastReading: {}
+});
+
 class DeviceProvider extends Component {
   constructor(props) {
     super(props);
@@ -51,12 +56,18 @@ class DeviceProvider extends Component {
     const defaultIP = window.location.hash && window.location.hash.substring(1);
 
     this.state = {
-      ...defaultState,
-      ip: defaultIP,
-      state: defaultIP ? ConnectionState.CONNECTING : ConnectionState.DISCONNECTED,
-      connect: this.connect.bind(this),
-      send: this.send.bind(this),
-      onSerialCmd: this.setSerialCb.bind(this)
+      deviceContext: {
+        ...defaultState,
+        ip: defaultIP,
+        state: defaultIP ? ConnectionState.CONNECTING : ConnectionState.DISCONNECTED,
+        connect: this.connect.bind(this),
+        send: this.send.bind(this),
+        onSerialCmd: this.setSerialCb.bind(this)
+      },
+      readingsContext: {
+        readings: [],
+        lastReading: {}
+      }
     };
 
     /**
@@ -74,13 +85,21 @@ class DeviceProvider extends Component {
     };
   }
 
+  setReadingsState(state = {}) {
+    this.setState({ readingsContext: {...this.state.readingsContext, ...state} });
+  }
+
+  setDeviceState(state = {}) {
+    this.setState({ deviceContext: {...this.state.deviceContext, ...state} });
+  }
+
   /*
    * Register Callbacks Here
    */
 
   cbInfo(data) {
     // {device: "Edge-o-Matic 3000", serial: "", hwVersion: "", fwVersion: "0.1.2"}
-    this.setState({ info: {
+    this.setDeviceState({ info: {
         deviceName: data.device,
         firmwareVersion: data.fwVersion,
         hardwareVersion: data.hwVersion,
@@ -89,25 +108,25 @@ class DeviceProvider extends Component {
   }
 
   cbConfigList(config) {
-    this.setState({ config });
+    this.setDeviceState({ config });
   }
 
   cbSerialCmd({ text, nonce }) {
-    if (this.state._serial_cb) {
-      this.state._serial_cb({ text, nonce });
+    if (this.state.deviceContext._serial_cb) {
+      this.state.deviceContext._serial_cb({ text, nonce });
     }
   }
 
   cbWifiStatus(status) {
-    this.setState({ status: {...this.state.status, wifi: status}});
+    this.setDeviceState({ status: {...this.state.deviceContext.status, wifi: status}});
   }
 
   cbSdStatus(status) {
-    this.setState({ status: {...this.state.status, sd: status}});
+    this.setDeviceState({ status: {...this.state.deviceContext.status, sd: status}});
   }
 
   cbReadings(data) {
-    let readings = [...this.state.readings];
+    let readings = [...this.state.readingsContext.readings];
 
     if (readings.length >= 100) {
       readings.shift();
@@ -115,14 +134,14 @@ class DeviceProvider extends Component {
 
     readings.push(data);
 
-    this.setState({
+    this.setReadingsState({
       readings: readings,
       lastReading: data
     });
   }
 
   cbMode(data) {
-    this.setState({ mode: data.text.toLowerCase(), modeDisplay: data.text });
+    this.setDeviceState({ mode: data.text.toLowerCase(), modeDisplay: data.text });
   }
 
   /*
@@ -131,7 +150,7 @@ class DeviceProvider extends Component {
 
   send(data) {
     if (this.ws) {
-      this.setState({ _ws_log: [ ...this.state._ws_log, {send: data} ]});
+      this.setDeviceState({ _ws_log: [ ...this.state.deviceContext._ws_log, {send: data} ]});
       this.ws.sendMessage(JSON.stringify(data));
     }
   }
@@ -141,15 +160,15 @@ class DeviceProvider extends Component {
 
     if (!ip) {
       state = "disconnected";
-    } else if (ip === this.state.ip) {
-      state = this.state.state;
+    } else if (ip === this.state.deviceContext.ip) {
+      state = this.state.deviceContext.state;
     }
 
-    this.setState({ ip, state });
+    this.setDeviceState({ ip, state });
   }
 
   handleWsOpen() {
-    this.setState({state: 'connected'});
+    this.setDeviceState({state: 'connected'});
     this.send({ streamReadings: true });
     this.send({ info: null });
     this.send({ configList: null });
@@ -157,7 +176,7 @@ class DeviceProvider extends Component {
   }
 
   handleWsClose() {
-    this.setState({state: 'disconnected'});
+    this.setDeviceState({state: 'disconnected'});
     console.log("Closed.");
   }
 
@@ -172,13 +191,13 @@ class DeviceProvider extends Component {
     }
 
     if (!doc.readings) {
-      let _ws_log = [...this.state._ws_log];
+      let _ws_log = [...this.state.deviceContext._ws_log];
 
       if (_ws_log.length >= 100) {
         _ws_log.shift();
       }
 
-      this.setState({_ws_log: [_ws_log, {recv: data}]});
+      this.setDeviceState({_ws_log: [_ws_log, {recv: data}]});
     }
 
     Object.keys(doc).map(cmd => {
@@ -191,23 +210,25 @@ class DeviceProvider extends Component {
   }
 
   setSerialCb(fn) {
-    this.setState({ _serial_cb: fn });
+    this.setDeviceState({ _serial_cb: fn });
   }
 
   render() {
     return (
-      <DeviceContext.Provider value={ this.state }>
-        { this.state.ip && <Websocket
-          url={'ws://' + this.state.ip}
-          onOpen={this.handleWsOpen.bind(this)}
-          onClose={this.handleWsClose.bind(this)}
-          ref={websocket => this.ws = websocket}
-          debug
-          onMessage={this.handleWsMessage.bind(this)}>
-        </Websocket> }
-        {/*{ this.props.children }*/}
-        { this.state.state === ConnectionState.CONNECTED && this.props.children }
-        { this.state.state !== ConnectionState.CONNECTED && <Connect /> }
+      <DeviceContext.Provider value={ this.state.deviceContext }>
+        <ReadingsContext.Provider value={ this.state.readingsContext }>
+          { this.state.deviceContext.ip && <Websocket
+            url={'ws://' + this.state.deviceContext.ip}
+            onOpen={this.handleWsOpen.bind(this)}
+            onClose={this.handleWsClose.bind(this)}
+            ref={websocket => this.ws = websocket}
+            debug
+            onMessage={this.handleWsMessage.bind(this)}>
+          </Websocket> }
+          {/*{ this.props.children }*/}
+          { this.state.deviceContext.state === ConnectionState.CONNECTED && this.props.children }
+          { this.state.deviceContext.state !== ConnectionState.CONNECTED && <Connect /> }
+        </ReadingsContext.Provider>
       </DeviceContext.Provider>
     )
   }
