@@ -8,6 +8,7 @@ import {BrowserRouter, Switch, Route} from "react-router-dom";
 import Console from "./pages/Console";
 import Settings from "./pages/Settings";
 import Buttplug from "./pages/Buttplug";
+import ButtplugProvider from "./DeviceProvider/ButtplugProvider";
 
 class App extends Component {
   constructor(props) {
@@ -19,28 +20,30 @@ class App extends Component {
       <div className="App" style={{ minHeight: '100vh'}}>
         <BrowserRouter>
           <DeviceProvider>
-            <Header />
+            <ButtplugProvider>
+              <Header />
 
-            <div className={'content'} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-              <Sidebar />
+              <div className={'content'} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <Sidebar />
 
-              <main style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-                <Switch>
-                  <Route exact path={'/'}>
-                    <Dashboard />
-                  </Route>
-                  <Route path={'/settings'}>
-                    <Settings />
-                  </Route>
-                  <Route path={'/console'}>
-                    <Console />
-                  </Route>
-                  <Route path={'/connect'}>
-                    <Buttplug />
-                  </Route>
-                </Switch>
-              </main>
-            </div>
+                <main style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
+                  <Switch>
+                    <Route exact path={'/'}>
+                      <Dashboard />
+                    </Route>
+                    <Route path={'/settings'}>
+                      <Settings />
+                    </Route>
+                    <Route path={'/console'}>
+                      <Console />
+                    </Route>
+                    <Route path={'/connect'}>
+                      <Buttplug />
+                    </Route>
+                  </Switch>
+                </main>
+              </div>
+            </ButtplugProvider>
           </DeviceProvider>
         </BrowserRouter>
       </div>

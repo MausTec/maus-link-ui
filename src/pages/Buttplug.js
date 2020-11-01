@@ -1,29 +1,21 @@
-import React, {useEffect, useRef, useState} from 'react'
-import useButtPlug from "react-buttplug/src/useButtPlug";
+import React, {useContext} from 'react'
 import {Button} from "react-materialize";
+import {ReadingsContext} from "../DeviceProvider";
+import {ButtplugContext, ButtplugState} from "../DeviceProvider/ButtplugProvider";
 
 const Buttplug = () => {
-  const [ready, setReady] = useState(false);
-  const [isConnected, setConnected] = useState(false);
-
-  useButtPlug(ready, (device) => {
-    console.log({ device });
-    setConnected(true);
-  });
+  const readings = useContext(ReadingsContext);
+  const buttplug = useContext(ButtplugContext);
 
   if (!window.Bluetooth) {
     return <div>Unsupported browser. Use Chrome like a normal person.</div>
   }
 
-  if (isConnected) {
-    return <div>Connected to a device.</div>
-  }
-
   return (
     <div>
       <h1>Buttplug.io Connection</h1>
-      { !ready && <Button onClick={e => setReady(true)}>Scan</Button> }
-      { ready && <Button onClick={e => setReady(false)}>Stop Scan</Button> }
+      { (buttplug.state === ButtplugState.IDLE) && <Button onClick={e => buttplug.startPairing()}>Scan</Button> }
+      { (buttplug.state === ButtplugState.PAIRING) && <Button onClick={e => buttplug.stopPairing()}>Stop Scan</Button> }
     </div>
   )
 };

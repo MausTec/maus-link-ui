@@ -1,0 +1,62 @@
+li.buttplug-device {
+  $bp-device-height: 4rem;
+
+  &.lovense {
+    background: linear-gradient(60deg, rgba(0,0,0,0.2), rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.4) 60.5%), #f6418d;
+  }
+
+  margin-top: -7px;
+  margin-bottom: 8px;
+  padding: 0 2rem;
+  font-weight: bold;
+  position: relative;
+
+  &, & > .device-name, & > .disconnect, & > .disconnect > i.material-icons {
+    height: $bp-device-height;
+    line-height: $bp-device-height;
+    vertical-align: middle;
+  }
+
+  .status {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    background-color: #3ac728;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+    transform: translateY(-50%);
+    transition: opacity 0.3s;
+  }
+
+  a.disconnect {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0 1.5rem;
+    text-align: right;
+    opacity: 0;
+    display: block;
+    transition: opacity 0.3s;
+    background-color: rgba(0,0,0, 0.1);
+    margin: 0;
+    float: none;
+
+    i.material-icons {
+      display: block;
+      color: white;
+      margin: 0;
+      float: none;
+    }
+  }
+
+  &:hover {
+    .status {
+      opacity: 0;
+    }
+    .disconnect {
+      opacity: 1;
+    }
+  }
+}
