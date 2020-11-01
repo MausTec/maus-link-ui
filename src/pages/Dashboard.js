@@ -2,10 +2,11 @@ import React, {useContext, useState} from 'react';
 import Stats from "../Stats";
 import Graph from "../Graph";
 import {Button, Container, Switch} from "react-materialize";
-import {DeviceContext, DeviceMode} from "../DeviceProvider";
+import {DeviceContext, DeviceMode, ReadingsContext} from "../DeviceProvider";
 
 const Dashboard = () => {
   const context = useContext(DeviceContext);
+  const readings = useContext(ReadingsContext);
 
   const onModeChange = (e) => {
     const auto = e.target.checked;
@@ -37,7 +38,7 @@ const Dashboard = () => {
 
       <div className={'row'} style={{ marginTop: '3rem' }}>
         <div className={'col s12 m4'}>
-          <Button onClick={onStop} large disabled={ context.lastReading.motor === 0} className={'red darken-2 block'}>STOP!</Button>
+          <Button onClick={onStop} large disabled={ readings.lastReading.motor === 0} className={'red darken-2 block'}>STOP!</Button>
         </div>
         <div className={'col s12 m4'}>
           <div className={'center'} style={{ lineHeight: '54px' }}>

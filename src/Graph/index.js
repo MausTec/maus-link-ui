@@ -1,18 +1,22 @@
 import React, {useContext, useState} from 'react'
 import {CartesianGrid, Legend, Line, LineChart, ReferenceLine, YAxis} from "recharts";
-import {DeviceContext} from "../DeviceProvider";
+import {DeviceContext, ReadingsContext} from "../DeviceProvider";
 import Measure from "react-measure";
 
 const Graph = (props) => {
   const context = useContext(DeviceContext);
+  const readings = useContext(ReadingsContext);
   const [size, setSize] = useState({width: 0, height: 300});
 
   const {
-    readings: data,
     config: {
       peakLimit
     }
   } = context;
+
+  const {
+    readings: data
+  } = readings;
 
   return (
     <Measure bounds onResize={contentRect => setSize(contentRect.bounds)}>

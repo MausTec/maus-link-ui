@@ -235,4 +235,4 @@ class DeviceProvider extends Component {
 }
 
 export default DeviceProvider;
-export { DeviceContext };
+export { DeviceContext, ReadingsContext };
