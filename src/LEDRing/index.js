@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import './index.scss'
-import {DeviceContext} from "../DeviceProvider";
+import {DeviceContext, ReadingsContext} from "../DeviceProvider";
 
 const radius = 300;
 const ledCount = 13;
@@ -16,15 +16,20 @@ const map = (num, in_min, in_max, out_min, out_max) => {
 
 const LEDRing = (props) => {
   const context = useContext(DeviceContext);
+  const readings = useContext(ReadingsContext);
+
   const {
-    lastReading: {
-      pressure = 0,
-      arousal = 0,
-    },
     config: {
       sensitivity_threshold: limit = 0
     }
   } = context;
+
+  const {
+    lastReading: {
+      pressure = 0,
+      arousal = 0,
+    }
+  } = readings;
 
   const pressureIdx = Math.floor(map(pressure, 0, 4096, 0, ledCount - 1));
   const limitIdx = Math.floor(map(limit, 0, 4096, 0, ledCount - 1));
