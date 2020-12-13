@@ -9,6 +9,7 @@ import Console from "./pages/Console";
 import Settings from "./pages/Settings";
 import Buttplug from "./pages/Buttplug";
 import ButtplugProvider from "./DeviceProvider/ButtplugProvider";
+import FileManager from "./pages/FileManager"
 
 class App extends Component {
   constructor(props) {
@@ -39,6 +40,9 @@ class App extends Component {
                     </Route>
                     <Route path={'/connect'}>
                       <Buttplug />
+                    </Route>
+                    <Route path={'/files/:path?'}>
+                      <FileManager />
                     </Route>
                   </Switch>
                 </main>

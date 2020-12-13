@@ -1,8 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react'
 import {Button, Col, Container, Row, Switch, TextInput} from "react-materialize";
-import Stats from "../Stats";
-import Graph from "../Graph";
-import WSConsole from "../DeviceProvider/WSConsole";
 import {DeviceContext} from "../DeviceProvider";
 
 const SettingForm = ({onSave, keys=[], config, title, toggle, children}) => {

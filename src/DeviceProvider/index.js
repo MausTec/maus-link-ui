@@ -40,6 +40,7 @@ const DeviceContext = React.createContext({
   connect: (ip) => {},
   send: (data) => {},
   onSerialCmd: (fn) => {},
+  dir: (path, cb) => {},
 });
 
 const ReadingsContext = React.createContext({
@@ -62,13 +63,16 @@ class DeviceProvider extends Component {
         state: defaultIP ? ConnectionState.CONNECTING : ConnectionState.DISCONNECTED,
         connect: this.connect.bind(this),
         send: this.send.bind(this),
-        onSerialCmd: this.setSerialCb.bind(this)
+        onSerialCmd: this.setSerialCb.bind(this),
+        dir: this.dir.bind(this),
       },
       readingsContext: {
         readings: [],
         lastReading: {}
       }
     };
+
+    this.nonceCb = {};
 
     /**
      * Register functions here to handle messages from the
@@ -81,7 +85,8 @@ class DeviceProvider extends Component {
       wifiStatus: this.cbWifiStatus,
       sdStatus: this.cbSdStatus,
       readings: this.cbReadings,
-      mode: this.cbMode
+      mode: this.cbMode,
+      dir: this.cbDir,
     };
   }
 
@@ -96,6 +101,14 @@ class DeviceProvider extends Component {
   /*
    * Register Callbacks Here
    */
+
+  cbDir(data) {
+    const { files, nonce } = data
+    if (nonce && this.nonceCb[nonce]) {
+      this.nonceCb[nonce](files)
+      delete this.nonceCb[nonce]
+    }
+  }
 
   cbInfo(data) {
     // {device: "Edge-o-Matic 3000", serial: "", hwVersion: "", fwVersion: "0.1.2"}
@@ -142,6 +155,17 @@ class DeviceProvider extends Component {
 
   cbMode(data) {
     this.setDeviceState({ mode: data.text.toLowerCase(), modeDisplay: data.text });
+  }
+
+  /*
+   * Public command helpers, which should* be abstracted to another module?
+   */
+  dir(path, cb) {
+    const nonce = Math.floor(Math.random() * 1000000);
+    this.nonceCb[nonce] = cb;
+    this.send({ dir: {
+      path, nonce
+    }})
   }
 
   /*
