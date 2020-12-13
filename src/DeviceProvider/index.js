@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Websocket from "react-websocket";
 import Connect from "./Connect";
+import {toast} from "materialize-css"
 
 export const DeviceMode = {
   MANUAL: "manual",
@@ -103,11 +104,7 @@ class DeviceProvider extends Component {
    */
 
   cbDir(data) {
-    const { files, nonce } = data
-    if (nonce && this.nonceCb[nonce]) {
-      this.nonceCb[nonce](files)
-      delete this.nonceCb[nonce]
-    }
+    // noop - this is an nonce-usually command.
   }
 
   cbInfo(data) {
@@ -161,10 +158,8 @@ class DeviceProvider extends Component {
    * Public command helpers, which should* be abstracted to another module?
    */
   dir(path, cb) {
-    const nonce = Math.floor(Math.random() * 1000000);
-    this.nonceCb[nonce] = cb;
     this.send({ dir: {
-      path, nonce
+      path, nonce: cb
     }})
   }
 
@@ -172,8 +167,20 @@ class DeviceProvider extends Component {
    * Internal State Things
    */
 
+  mknonce(cb) {
+    const nonce = Math.floor(Math.random() * 1000000);
+    this.nonceCb[nonce] = cb;
+    return nonce;
+  }
+
   send(data) {
     if (this.ws) {
+      // Filter out nonce funcs:
+      Object.keys(data).forEach(k => {
+        if (data[k] && typeof data[k].nonce === 'function') {
+          data[k].nonce = this.mknonce(data[k].nonce);
+        }
+      })
       this.setDeviceState({ _ws_log: [ ...this.state.deviceContext._ws_log, {send: data} ]});
       this.ws.sendMessage(JSON.stringify(data));
     }
@@ -214,6 +221,9 @@ class DeviceProvider extends Component {
       console.warn(e);
     }
 
+    if (!doc.readings)
+      console.debug("handleWsMessage", doc, data);
+
     if (!doc.readings) {
       let _ws_log = [...this.state.deviceContext._ws_log];
 
@@ -224,9 +234,23 @@ class DeviceProvider extends Component {
       this.setDeviceState({_ws_log: [_ws_log, {recv: data}]});
     }
 
-    Object.keys(doc).map(cmd => {
+    Object.keys(doc).forEach(cmd => {
+      const data = doc[cmd];
+      if (data.nonce && this.nonceCb[data.nonce]) {
+        this.nonceCb[data.nonce](data);
+        delete this.nonceCb[data.nonce];
+      }
+
+      if (data.error) {
+        toast({
+          html: data.error,
+          classes: 'red white-text',
+          duration: 3000
+        })
+      }
+
       if (this.callbacks[cmd]) {
-        this.callbacks[cmd].bind(_this)(doc[cmd]);
+        this.callbacks[cmd].bind(_this)(data);
       } else {
         console.warn("Received unknown command from device: ", cmd, doc[cmd]);
       }

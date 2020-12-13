@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "buttplug": "^0.13.2",
+    "byte-size": "^7.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.13.1",

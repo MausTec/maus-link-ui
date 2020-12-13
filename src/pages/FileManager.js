@@ -1,45 +1,100 @@
 import React, {useContext, useEffect, useState} from "react"
-import {Icon, ProgressBar, Table, Container} from "react-materialize"
+import {Button, Icon, ProgressBar, Table, Container} from "react-materialize"
 import {useRouteMatch, Link} from "react-router-dom"
 import {DeviceContext} from "../DeviceProvider"
+import byteSize from 'byte-size'
 
 const FileManager = () => {
-  const { dir: getDir } = useContext(DeviceContext);
+  const { dir: getDir, send } = useContext(DeviceContext);
   const { params } = useRouteMatch()
-  const { path: pwd = "/" } = params
+  const pwd = params[0] || "/"
   const pwdArr = pwd.split('/').filter(Boolean)
 
   const [dir, setDir] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
+  const reload = () => {
     setLoading(true)
-    getDir && getDir(pwd, (files) => {
+    getDir && getDir(pwd, ({files}) => {
       setLoading(false)
       setDir(files)
-      console.log({files});
+      console.log({files, pwd});
     });
-  }, [getDir, pwd])
+  }
 
+  const mkdir = (filename) => {
+    send({
+      mkdir: {
+        path: [...pwdArr, filename].join('/'),
+        nonce: (data) => {
+          reload();
+        }
+      }
+    })
+  }
+
+  const handleMkdir = (e) => {
+    e.preventDefault();
+    const filename = prompt("New Directory Name");
+    filename && mkdir(filename);
+  }
+
+  useEffect(reload, [getDir, pwd]);
+
+  const sorted = [...dir].sort((a, b) => {
+    const dircmp = (a.dir ? 0 : 1) - (b.dir ? 0 : 1)
+    if (dircmp !== 0) {
+      return dircmp;
+    }
+    else if (a.name > b.name) {
+      return 1;
+    }
+    else if (a.name < b.name) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
 
   return (
     <Container style={{marginTop: '3rem', marginBottom: '3rem'}}>
-      <h1 style={{ fontSize: '1.2rem', marginTop: 0}} className={'dir-listing'}>
-        <Link to={'/files/'}><Icon className={'left'}>folder</Icon></Link>
-        { pwdArr.map((dir, i) =>
-          <React.Fragment>
-            <span>/</span>
-            <Link to={'/files/' + pwdArr.slice(0, i).join('/')}>{ dir }</Link>
-          </React.Fragment>) }
-      </h1>
+      <div className={'header'} style={{ marginBottom: '3rem'}}>
+        <div className={'right'}>
+          <Button onClick={handleMkdir}>Mkdir</Button>
+        </div>
+        <h1 style={{ fontSize: '1.2rem', marginTop: 0, lineHeight: '2rem', verticalAlign: 'middle'}} className={'dir-listing'}>
+          <Link to={'/files/'}><i className={'material-icons'} style={{ lineHeight: '2rem', verticalAlign: 'middle', float: 'left', height: '2rem'}}>home</i></Link>
+          &nbsp;
+          { pwdArr.map((dir, i) =>
+            <React.Fragment>
+              <span className={'dir-path-sep grey-text'} style={{ margin: '0 1rem' }}>/</span>
+              <Link to={'/files/' + pwdArr.slice(0, i + 1).join('/')}>{ dir }</Link>
+            </React.Fragment>) }
+        </h1>
+      </div>
+
       { !loading && <Table>
-        { dir.map(entry => (
-          <tr key={entry.name}>
-            <td>{entry.dir ? <Icon className={'left'}>folder</Icon> : null}</td>
-            <td><Link to={'/files' + entry.name}>{entry.name}</Link></td>
-            <td>{entry.size}</td>
-          </tr>
-        ))}
+        <tbody>
+        { dir.length <= 0 && <tr>
+          <td colSpan={2}>
+            <div className={'center grey-text'}>No files here.</div>
+          </td>
+        </tr>}
+          { sorted.map(entry => (
+            <tr key={entry.name}>
+              <td style={{ paddingLeft: 0 }}>
+                <Icon className={'left grey-text'}>{ entry.dir ? "folder" : "insert_drive_file" }</Icon>
+                <Link to={(entry.dir ? '/files' : '/file') + entry.name}>
+                  {entry.name.replace(/^.*\//g, '')}
+                </Link>
+              </td>
+              <td align={"right"} className={'right-align'}>
+                { entry.size ? byteSize(entry.size).toString() : null }
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </Table> }
       { loading && <ProgressBar /> }
     </Container>

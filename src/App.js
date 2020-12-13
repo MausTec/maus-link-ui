@@ -41,7 +41,7 @@ class App extends Component {
                     <Route path={'/connect'}>
                       <Buttplug />
                     </Route>
-                    <Route path={'/files/:path?'}>
+                    <Route path={'/files/*'}>
                       <FileManager />
                     </Route>
                   </Switch>
