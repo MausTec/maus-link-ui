@@ -1,0 +1,39 @@
+table {
+  .card > & {
+    td:first-child {
+      padding-left: 1rem;
+    }
+
+    td:last-child {
+      padding-right: 1rem;
+    }
+  }
+
+  tr {
+    border-bottom-color: $input-border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.compact {
+      td {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    &:hover > td.hide-unless-hover {
+      opacity: 1.0;
+    }
+  }
+
+  td.hide-unless-hover {
+    opacity: 0.2;
+    transition: opacity 0.3s;
+
+    a > i.material-icons {
+      color: color('grey', 'base')
+    }
+  }
+}

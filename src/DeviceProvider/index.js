@@ -236,17 +236,21 @@ class DeviceProvider extends Component {
 
     Object.keys(doc).forEach(cmd => {
       const data = doc[cmd];
-      if (data.nonce && this.nonceCb[data.nonce]) {
-        this.nonceCb[data.nonce](data);
-        delete this.nonceCb[data.nonce];
-      }
 
-      if (data.error) {
-        toast({
-          html: data.error,
-          classes: 'red white-text',
-          duration: 3000
-        })
+      // Automatically handle some common keys:
+      if (data) {
+        if (data.nonce && this.nonceCb[data.nonce]) {
+          this.nonceCb[data.nonce](data);
+          delete this.nonceCb[data.nonce];
+        }
+
+        if (data.error) {
+          toast({
+            html: data.error,
+            classes: 'red white-text',
+            duration: 3000
+          })
+        }
       }
 
       if (this.callbacks[cmd]) {
@@ -262,11 +266,13 @@ class DeviceProvider extends Component {
   }
 
   render() {
+    const wsProtocol = "ws" + window.location.protocol.slice(4)
+
     return (
       <DeviceContext.Provider value={ this.state.deviceContext }>
         <ReadingsContext.Provider value={ this.state.readingsContext }>
           { this.state.deviceContext.ip && <Websocket
-            url={'ws://' + this.state.deviceContext.ip}
+            url={wsProtocol + '//' + this.state.deviceContext.ip}
             onOpen={this.handleWsOpen.bind(this)}
             onClose={this.handleWsClose.bind(this)}
             ref={websocket => this.ws = websocket}

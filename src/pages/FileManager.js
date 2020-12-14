@@ -74,29 +74,34 @@ const FileManager = () => {
         </h1>
       </div>
 
-      { !loading && <Table>
-        <tbody>
-        { dir.length <= 0 && <tr>
-          <td colSpan={2}>
-            <div className={'center grey-text'}>No files here.</div>
-          </td>
-        </tr>}
-          { sorted.map(entry => (
-            <tr key={entry.name}>
-              <td style={{ paddingLeft: 0 }}>
-                <Icon className={'left grey-text'}>{ entry.dir ? "folder" : "insert_drive_file" }</Icon>
-                <Link to={(entry.dir ? '/files' : '/file') + entry.name}>
-                  {entry.name.replace(/^.*\//g, '')}
-                </Link>
-              </td>
-              <td align={"right"} className={'right-align'}>
-                { entry.size ? byteSize(entry.size).toString() : null }
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table> }
-      { loading && <ProgressBar /> }
+      <div className={'card'}>
+        { !loading && <Table>
+          <tbody>
+          { dir.length <= 0 && <tr>
+            <td colSpan={2}>
+              <div className={'center grey-text'}>No files here.</div>
+            </td>
+          </tr>}
+            { sorted.map(entry => (
+              <tr key={entry.name} className={entry.dir ? 'dir compact' : 'file'}>
+                <td>
+                  <Icon className={'left grey-text ' + (entry.dir ? 'primary-text' : '')}>{ entry.dir ? "folder" : "insert_drive_file" }</Icon>
+                  <Link to={(entry.dir ? '/files' : '/file') + entry.name}>
+                    {entry.name.replace(/^.*\//g, '')}
+                  </Link>
+                </td>
+                <td align={"right"} className={'right-align grey-text text-darken-1'}>
+                  { entry.size ? byteSize(entry.size).toString() : null }
+                </td>
+                <td align={"right"} className={'right-align hide-unless-hover'}>
+                  <a href={'#'}><Icon>delete</Icon></a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table> }
+        { loading && <ProgressBar /> }
+      </div>
     </Container>
   )
 }
