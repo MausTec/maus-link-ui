@@ -8,11 +8,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "buttplug": "^0.13.2",
-<<<<<<< HEAD
     "byte-size": "^7.0.0",
-    "electron-squirrel-startup": "^1.0.0",
-=======
->>>>>>> parent of e4e9f14 (Electron?)
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.13.1",
     "react-buttplug": "https://gitpkg.now.sh/CammyLeone/devious-buttplug/react-buttplug?main",
@@ -21,7 +17,7 @@
     "react-materialize": "^3.9.3",
     "react-measure": "^2.5.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.0",
+    "react-scripts": "^4.0.3",
     "react-websocket": "^2.1.0",
     "recharts": "^1.8.5"
   },
@@ -50,6 +46,6 @@
   },
   "devDependencies": {
     "gh-pages": "^3.1.0",
-    "node-sass": "^4.14.1"
+    "node-sass": "^6.0.1"
   }
 }
