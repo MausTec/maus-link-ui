@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import './index.scss'
 import {DeviceContext, ReadingsContext} from "../DeviceProvider";
 
-const radius = 300;
+const radius = 250;
 const ledCount = 13;
 const startDeg = 40;
 const endDeg = 360 - startDeg;

@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import Websocket from "react-websocket";
 import Connect from "./Connect";
-import {toast} from "materialize-css"
+import {toast} from "materialize-css";
+import ReactDOM from "react-dom";
 
 export const DeviceMode = {
   MANUAL: "manual",
-  AUTOMATIC: "automatic"
+  AUTOMATIC: "automatic",
+  AUTORGASM: "postorgasm"
 };
 
 export const ConnectionState = {
