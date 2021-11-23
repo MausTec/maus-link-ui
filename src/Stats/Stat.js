@@ -61,11 +61,11 @@ const Stat = ({name, style = {}, onChange, unit, round, ...props}) => {
     <React.Fragment>
       <h4 style={{marginTop: '0rem', ...headingStyle, ...style}} className="stat-heading center primary-text">{name}</h4>
       <h1 className={'stat-value center primary-light-text'} style={valueStyle}>
-        {false && !disabled && <Button flat onClick={e => onChange(valuedown)} className={'primary-dark-text'}
+        {!disabled && <Button flat onClick={e => onChange(valuedown)} className={'primary-dark-text'}
                              style={buttonStyle}><Icon>keyboard_arrow_down</Icon></Button>}
         {v_disp}
         { unit && <span style={{ fontSize: '1.2rem'}}> { unit }</span> }
-        {false && !disabled && <Button flat onClick={e => onChange(valueup)} className={'primary-dark-text'}
+        {!disabled && <Button flat onClick={e => onChange(valueup)} className={'primary-dark-text'}
                              style={{...buttonStyle, margin: '0 0 0 0.5rem'}}><Icon>keyboard_arrow_up</Icon></Button>}
       </h1>
       { !disabled && <RangeSlider onChange={(e) => onChange(e)} {...sliderProps={...props}} /> }      

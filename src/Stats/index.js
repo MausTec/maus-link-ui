@@ -12,8 +12,9 @@ const Stats = () => {
   const [arousalLimit, setlimitVal] = useState(0);
   const [motorSpeed, setspeedVal] = useState(0);
   const [arousal, setaarousalVal] = useState(0);
+  const [runMode, setrunMode] = useState("manual");
+  const [disabled, setDisabledState] = useState(false);
   let props = {};
-  let disabled = false;
 
   const onPeakLimitChange = (e) => {
     const sensitivity_threshold = e;
@@ -59,14 +60,18 @@ const Stats = () => {
   useEffect(() => {
     setaarousalVal(readings.lastReading.arousal);
   }, [readings.lastReading.arousal]);
+
+  useEffect(() => {
+    setrunMode(context.mode);
+    if (context.mode !== DeviceMode.MANUAL) {
+      setDisabledState(true);
+    } else {
+      setDisabledState(false);
+    }
+  }, [context.mode]);
     
   ////////////////
   //  Props  
-  if (context.mode === DeviceMode.MANUAL) {
-      disabled = false;
-    } else {
-      disabled = true;
-    }
   const p_kpa_max = Math.floor(100 * ((255 - sens) / 255));
   const p_perc = pavg / 4095;
   const p_kpa = p_perc * p_kpa_max;

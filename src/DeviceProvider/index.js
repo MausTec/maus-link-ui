@@ -22,7 +22,7 @@ const defaultState = {
   config: {},
   readings: [],
   lastReading: {},
-  mode: "",
+  mode: "manual",
   modeDisplay: "",
   info: {
     deviceName: "",
