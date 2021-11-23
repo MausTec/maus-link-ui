@@ -101,7 +101,7 @@ const Dashboard = () => {
       max: "120", 
       step: "1", 
       defaultValue: edgedurationMinutes, 
-      className: 'red darken-2'
+      className: 'primary-text darken-2 block'
     }), [edgedurationMinutes]
   );  
 
@@ -114,7 +114,7 @@ const Dashboard = () => {
       max: "240", 
       step:"1",
       defaultValue: postODurationSeconds,
-      className: 'red darken-2'
+      className: 'primary-text darken-2 block'
     }), [postODurationSeconds]
   );
 
@@ -180,11 +180,11 @@ const Dashboard = () => {
         </div>
         <div className={'col s12 m4'}>
           <div className={'center'} style={{textAlign: 'start'}} >
-            <div >Edging for {edgedurationMinutes}min to Orgasm</div>
+            <div className={'center primary-text darken-2 block'} >Edging for {edgedurationMinutes}min to Orgasm</div>
             <RangeSlider {...sliderProps={...edgesliderProps}} />
             <RangeSlider {...sliderProps={...postsliderProps}} />
-            { postODurationSeconds != 0 && <div>Post Orgasm {postODurationSeconds}sec Stimulation</div>}
-            { postODurationSeconds == 0 && <div>Ruined Orgasm</div>}
+            { postODurationSeconds != 0 && <div className={'center primary-text darken-2 block'}>Post Orgasm {postODurationSeconds}sec Stimulation</div>}
+            { postODurationSeconds == 0 && <div className={'center primary-text darken-2 block'}>Ruined Orgasm</div>}
           </div>
         </div>
         <div className={'col s12 m4'}>
