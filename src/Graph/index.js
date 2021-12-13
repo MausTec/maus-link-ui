@@ -8,11 +8,13 @@ const Graph = (props) => {
   const readings = useContext(ReadingsContext);
   const [size, setSize] = useState({width: 0, height: 300});
 
+  const config = context.config || {
+    peakLimit: 0
+  };
+
   const {
-    config: {
       peakLimit
-    }
-  } = context;
+  } = config;
 
   const {
     readings: data

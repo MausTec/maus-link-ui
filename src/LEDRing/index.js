@@ -18,11 +18,13 @@ const LEDRing = (props) => {
   const context = useContext(DeviceContext);
   const readings = useContext(ReadingsContext);
 
+  const config = context.config || {
+    sensitivity_threshold: 0
+  };
+
   const {
-    config: {
-      sensitivity_threshold: limit = 0
-    }
-  } = context;
+    limit
+  } = config;
 
   const {
     lastReading: {

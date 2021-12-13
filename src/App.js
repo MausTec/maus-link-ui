@@ -3,13 +3,9 @@ import React, {Component} from 'react';
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import DeviceProvider from "./DeviceProvider";
-import Dashboard from "./pages/Dashboard.js";
-import {BrowserRouter, Switch, Route} from "react-router-dom";
-import Console from "./pages/Console";
-import Settings from "./pages/Settings";
-import Buttplug from "./pages/Buttplug";
+import {BrowserRouter} from "react-router-dom";
 import ButtplugProvider from "./DeviceProvider/ButtplugProvider";
-import FileManager from "./pages/FileManager"
+import DeviceRoutes from "./DeviceRoutes";
 
 class App extends Component {
   constructor(props) {
@@ -28,23 +24,7 @@ class App extends Component {
                 <Sidebar />
 
                 <main style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-                  <Switch>
-                    <Route exact path={'/'}>
-                      <Dashboard />
-                    </Route>
-                    <Route path={'/settings'}>
-                      <Settings />
-                    </Route>
-                    <Route path={'/console'}>
-                      <Console />
-                    </Route>
-                    <Route path={'/connect'}>
-                      <Buttplug />
-                    </Route>
-                    <Route path={'/files/*'}>
-                      <FileManager />
-                    </Route>
-                  </Switch>
+                  <DeviceRoutes />
                 </main>
               </div>
             </ButtplugProvider>

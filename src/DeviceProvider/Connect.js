@@ -6,7 +6,6 @@ import {ConnectionState} from "./index";
 
 const Connect = (props) => {
   const context = useContext(DeviceContext);
-  console.log(context);
   const [ip, setIp] = useState(context.ip);
 
   const handleSubmit = (e) => {
@@ -21,6 +20,9 @@ const Connect = (props) => {
         <div className={'card'}>
           <div className={'card-content'}>
             <div className={'card-title'}>Connect Your Device</div>
+
+            { context.error && <div className={"error red-text text-darken-1"}>{ context.error }</div> }
+
             <Row style={{ margin: '0.5rem -0.75rem 0 -0.75rem'}}>
               <TextInput autoFocus s={12} disabled={ context.state === ConnectionState.CONNECTING } type={"text"} label={"IP Address"} id={'ip_address'} onChange={e => setIp(e.target.value)} />
             </Row>

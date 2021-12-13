@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Websocket from "react-websocket";
 import Connect from "./Connect";
 import {toast} from "materialize-css"
+import GetDeviceInfo from "./GetDeviceInfo";
 
 export const DeviceMode = {
   MANUAL: "manual",
@@ -17,6 +18,7 @@ export const ConnectionState = {
 const defaultState = {
   ip: null,
   state: ConnectionState.DISCONNECTED,
+  error: null,
   config: {},
   readings: [],
   lastReading: {},
@@ -109,6 +111,10 @@ class DeviceProvider extends Component {
 
   cbInfo(data) {
     // {device: "Edge-o-Matic 3000", serial: "", hwVersion: "", fwVersion: "0.1.2"}
+    if (!data) {
+      return;
+    }
+
     this.setDeviceState({ info: {
         deviceName: data.device,
         firmwareVersion: data.fwVersion,
@@ -188,6 +194,7 @@ class DeviceProvider extends Component {
 
   connect(ip) {
     let state = "connecting";
+    let error = null;
 
     if (!ip) {
       state = "disconnected";
@@ -195,7 +202,7 @@ class DeviceProvider extends Component {
       state = this.state.deviceContext.state;
     }
 
-    this.setDeviceState({ ip, state });
+    this.setDeviceState({ ip, state, error });
   }
 
   handleWsOpen() {
@@ -206,9 +213,9 @@ class DeviceProvider extends Component {
     console.log("Connected");
   }
 
-  handleWsClose() {
-    this.setDeviceState({state: 'disconnected'});
-    console.log("Closed.");
+  handleWsClose(error) {
+    this.setDeviceState({state: 'disconnected', error: error || "Unknown error."});
+    console.log("Closed.", error);
   }
 
   handleWsMessage(data) {
@@ -265,6 +272,16 @@ class DeviceProvider extends Component {
     this.setDeviceState({ _serial_cb: fn });
   }
 
+  renderChildren() {
+    if (this.state.deviceContext.state !== ConnectionState.CONNECTED) {
+      return (<Connect />)
+    } else if (!this.state.deviceContext.info.deviceName) {
+      return (<GetDeviceInfo />)
+    } else {
+      return this.props.children
+    }
+  }
+
   render() {
     const wsProtocol = "ws" + window.location.protocol.slice(4)
 
@@ -279,9 +296,7 @@ class DeviceProvider extends Component {
             debug
             onMessage={this.handleWsMessage.bind(this)}>
           </Websocket> }
-          {/*{ this.props.children }*/}
-          { this.state.deviceContext.state === ConnectionState.CONNECTED && this.props.children }
-          { this.state.deviceContext.state !== ConnectionState.CONNECTED && <Connect /> }
+          { this.renderChildren() }
         </ReadingsContext.Provider>
       </DeviceContext.Provider>
     )

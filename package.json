@@ -5,6 +5,7 @@
   "homepage": "http://nogasm-ui.maustec.io/",
   "main": "electron/main.js",
   "dependencies": {
+    "@maustec/react-buttplug": "0.0.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -13,7 +14,6 @@
     "electron-squirrel-startup": "^1.0.0",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.13.1",
-    "react-buttplug": "https://gitpkg.now.sh/CammyLeone/devious-buttplug/react-buttplug?main",
     "react-charts": "^2.0.0-beta.7",
     "react-dom": "^16.13.1",
     "react-materialize": "^3.9.3",
