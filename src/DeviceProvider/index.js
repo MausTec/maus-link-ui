@@ -90,6 +90,7 @@ class DeviceProvider extends Component {
       readings: this.cbReadings,
       mode: this.cbMode,
       dir: this.cbDir,
+      page: this.cbPage,
     };
   }
 
@@ -104,6 +105,12 @@ class DeviceProvider extends Component {
   /*
    * Register Callbacks Here
    */
+
+  cbPage(data) {
+    // FOR NOW, we're gonna pass this to Mode since the old mode detection worked this way on v 0.x firmware.
+    // V1.x firmwares report a page here.
+    this.cbMode({text: data});
+  }
 
   cbDir(data) {
     // noop - this is an nonce-usually command.
@@ -157,7 +164,13 @@ class DeviceProvider extends Component {
   }
 
   cbMode(data) {
-    this.setDeviceState({ mode: data.text.toLowerCase(), modeDisplay: data.text });
+    let mode = "manual";
+
+    if (data.text.match(/auto|edging/i)) {
+      mode = "automatic";
+    }
+
+    this.setDeviceState({ mode, modeDisplay: data.text });
   }
 
   /*
