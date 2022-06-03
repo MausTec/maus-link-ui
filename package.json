@@ -2,7 +2,7 @@
   "name": "nogasm-ui",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://nogasm-ui.maustec.io/",
+  "homepage": "https://link.maustec.io/",
   "main": "electron/main.js",
   "dependencies": {
     "@maustec/react-buttplug": "0.0.5",
