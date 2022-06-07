@@ -62,7 +62,7 @@ class DeviceProvider extends Component {
 
     this.ws = null;
 
-    const defaultIP = window.location.hash && window.location.hash.substring(1);
+    const defaultIP = window.location.hash && 'ws://' + window.location.hash.substring(1);
 
     this.state = {
       deviceContext: {
