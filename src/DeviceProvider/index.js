@@ -35,15 +35,20 @@ const defaultState = {
     sd: {}
   },
   _ws_log: [],
-  _serial_cb: () => {}
+  _serial_cb: () => {
+  }
 };
 
 const DeviceContext = React.createContext({
   ...defaultState,
-  connect: (ip) => {},
-  send: (data) => {},
-  onSerialCmd: (fn) => {},
-  dir: (path, cb) => {},
+  connect: (ip) => {
+  },
+  send: (data) => {
+  },
+  onSerialCmd: (fn) => {
+  },
+  dir: (path, cb) => {
+  },
 });
 
 const ReadingsContext = React.createContext({
@@ -95,11 +100,11 @@ class DeviceProvider extends Component {
   }
 
   setReadingsState(state = {}) {
-    this.setState({ readingsContext: {...this.state.readingsContext, ...state} });
+    this.setState({readingsContext: {...this.state.readingsContext, ...state}});
   }
 
   setDeviceState(state = {}) {
-    this.setState({ deviceContext: {...this.state.deviceContext, ...state} });
+    this.setState({deviceContext: {...this.state.deviceContext, ...state}});
   }
 
   /*
@@ -122,30 +127,32 @@ class DeviceProvider extends Component {
       return;
     }
 
-    this.setDeviceState({ info: {
+    this.setDeviceState({
+      info: {
         deviceName: data.device,
         firmwareVersion: data.fwVersion,
         hardwareVersion: data.hwVersion,
         deviceSerial: data.serial
-    } });
+      }
+    });
   }
 
   cbConfigList(config) {
-    this.setDeviceState({ config });
+    this.setDeviceState({config});
   }
 
-  cbSerialCmd({ text, nonce }) {
+  cbSerialCmd({text, nonce}) {
     if (this.state.deviceContext._serial_cb) {
-      this.state.deviceContext._serial_cb({ text, nonce });
+      this.state.deviceContext._serial_cb({text, nonce});
     }
   }
 
   cbWifiStatus(status) {
-    this.setDeviceState({ status: {...this.state.deviceContext.status, wifi: status}});
+    this.setDeviceState({status: {...this.state.deviceContext.status, wifi: status}});
   }
 
   cbSdStatus(status) {
-    this.setDeviceState({ status: {...this.state.deviceContext.status, sd: status}});
+    this.setDeviceState({status: {...this.state.deviceContext.status, sd: status}});
   }
 
   cbReadings(data) {
@@ -170,16 +177,18 @@ class DeviceProvider extends Component {
       mode = "automatic";
     }
 
-    this.setDeviceState({ mode, modeDisplay: data.text });
+    this.setDeviceState({mode, modeDisplay: data.text});
   }
 
   /*
    * Public command helpers, which should* be abstracted to another module?
    */
   dir(path, cb) {
-    this.send({ dir: {
-      path, nonce: cb
-    }})
+    this.send({
+      dir: {
+        path, nonce: cb
+      }
+    })
   }
 
   /*
@@ -200,7 +209,7 @@ class DeviceProvider extends Component {
           data[k].nonce = this.mknonce(data[k].nonce);
         }
       })
-      this.setDeviceState({ _ws_log: [ ...this.state.deviceContext._ws_log, {send: data} ]});
+      this.setDeviceState({_ws_log: [...this.state.deviceContext._ws_log, {send: data}]});
       this.ws.sendMessage(JSON.stringify(data));
     }
   }
@@ -215,14 +224,14 @@ class DeviceProvider extends Component {
       state = this.state.deviceContext.state;
     }
 
-    this.setDeviceState({ ip, state, error });
+    this.setDeviceState({ip, state, error});
   }
 
   handleWsOpen() {
     this.setDeviceState({state: 'connected'});
-    this.send({ streamReadings: true });
-    this.send({ info: null });
-    this.send({ configList: null });
+    this.send({streamReadings: true});
+    this.send({info: null});
+    this.send({configList: null});
     console.log("Connected");
   }
 
@@ -236,8 +245,8 @@ class DeviceProvider extends Component {
     let doc;
     try {
       doc = JSON.parse(data);
-    } catch(e) {
-      doc = { data };
+    } catch (e) {
+      doc = {data};
       console.warn(e);
     }
 
@@ -282,34 +291,32 @@ class DeviceProvider extends Component {
   }
 
   setSerialCb(fn) {
-    this.setDeviceState({ _serial_cb: fn });
+    this.setDeviceState({_serial_cb: fn});
   }
 
   renderChildren() {
     if (this.state.deviceContext.state !== ConnectionState.CONNECTED) {
-      return (<Connect />)
+      return (<Connect/>)
     } else if (!this.state.deviceContext.info.deviceName) {
-      return (<GetDeviceInfo />)
+      return (<GetDeviceInfo/>)
     } else {
       return this.props.children
     }
   }
 
   render() {
-    const wsProtocol = "ws" + window.location.protocol.slice(4)
-
     return (
-      <DeviceContext.Provider value={ this.state.deviceContext }>
-        <ReadingsContext.Provider value={ this.state.readingsContext }>
-          { this.state.deviceContext.ip && <Websocket
-            url={wsProtocol + '//' + this.state.deviceContext.ip}
+      <DeviceContext.Provider value={this.state.deviceContext}>
+        <ReadingsContext.Provider value={this.state.readingsContext}>
+          {this.state.deviceContext.ip && <Websocket
+            url={this.state.deviceContext.ip}
             onOpen={this.handleWsOpen.bind(this)}
             onClose={this.handleWsClose.bind(this)}
             ref={websocket => this.ws = websocket}
             debug
             onMessage={this.handleWsMessage.bind(this)}>
-          </Websocket> }
-          { this.renderChildren() }
+          </Websocket>}
+          {this.renderChildren()}
         </ReadingsContext.Provider>
       </DeviceContext.Provider>
     )
@@ -317,4 +324,4 @@ class DeviceProvider extends Component {
 }
 
 export default DeviceProvider;
-export { DeviceContext, ReadingsContext };
+export {DeviceContext, ReadingsContext};

@@ -59,9 +59,9 @@
     ]
   },
   "build": {
-    "appId": "io.maustec.nogasm-ui.desktop",
+    "appId": "io.maustec.maus-link.desktop",
     "mac": {
-      "category": "io.maustec.nogasm-ui.desktop"
+      "category": "io.maustec.maus-link.desktop"
     }
   },
   "postinstall": "electron-builder install-app-deps",
@@ -82,7 +82,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "nogasm_ui"
+            "name": "link"
           }
         },
         {
