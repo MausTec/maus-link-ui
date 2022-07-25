@@ -163,6 +163,20 @@ html {
 
 .App > .content {
   margin-left: $sidenav-width;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  &.no-nav {
+    .sidenav {
+      margin-top: 0;
+    }
+
+    main {
+      padding-top: 0;
+    }
+  }
 }
 
 ul.tabs {
@@ -172,6 +186,10 @@ ul.tabs {
 
   li.tab {
     flex-grow: 1;
+
+    a {
+      padding: 0 1rem;
+    }
   }
 }
 
