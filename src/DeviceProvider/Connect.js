@@ -3,6 +3,7 @@ import {DeviceContext} from './index.js'
 import {Button, Row, Switch, Tab, Tabs, TextInput} from "react-materialize";
 import logo from '../assets/MT_Logo_White_64h.png'
 import {ConnectionState} from "./index";
+import {Link} from "react-router-dom";
 
 const Connect = (props) => {
   const context = useContext(DeviceContext);
@@ -28,6 +29,13 @@ const Connect = (props) => {
   // noinspection HttpUrlsUsage
   return (
     <div className={'full-splash'} style={{minHeight: '100vh', position: 'relative'}}>
+      <div className="service-links" style={{
+        position: "absolute",
+        right: "0.5rem",
+        bottom: "0.5rem",
+      }}>
+        <Link to={"/diagnostic"} style={{ color: "rgba(255,255,255,0.5)" }}>Diagnostic</Link>
+      </div>
       <div className="form" style={{
         position: 'absolute',
         top: '50%',
