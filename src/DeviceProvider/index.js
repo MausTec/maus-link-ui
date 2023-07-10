@@ -62,12 +62,23 @@ class DeviceProvider extends Component {
 
     this.ws = null;
 
-    const defaultIP = window.location.hash && `ws${window.location.protocol.substring(4)}//` + window.location.hash.substring(1);
+    const defaultProto = `ws${window.location.protocol.substring(4)}//`
+    const hashParts = window.location.hash ? window.location.hash.substring(1).split(':') : [];
+    let defaultIP = (defaultProto + hashParts[0]);
+    let defaultId = null;
+
+    if (hashParts[0] === 'link') {
+      defaultId = hashParts[1];
+      defaultIP = `wss://link.maustec.net/remote/${defaultId}`;
+    } else if (hashParts[0] === 'wss') {
+      defaultIP = `wss://${hashParts[1]}`
+    }
 
     this.state = {
       deviceContext: {
         ...defaultState,
         ip: defaultIP,
+        id: defaultId,
         state: defaultIP ? ConnectionState.CONNECTING : ConnectionState.DISCONNECTED,
         connect: this.connect.bind(this),
         send: this.send.bind(this),
@@ -296,7 +307,7 @@ class DeviceProvider extends Component {
 
   renderChildren() {
     if (this.state.deviceContext.state !== ConnectionState.CONNECTED) {
-      return (<Connect/>)
+      return (<Connect defaultIp={this.state.deviceContext.ip} defaultId={this.state.deviceContext.id} />)
     } else if (!this.state.deviceContext.info.deviceName) {
       return (<GetDeviceInfo/>)
     } else {
@@ -312,6 +323,7 @@ class DeviceProvider extends Component {
             url={this.state.deviceContext.ip}
             onOpen={this.handleWsOpen.bind(this)}
             onClose={this.handleWsClose.bind(this)}
+
             ref={websocket => this.ws = websocket}
             debug
             onMessage={this.handleWsMessage.bind(this)}>

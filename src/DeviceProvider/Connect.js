@@ -5,16 +5,18 @@ import logo from '../assets/MT_Logo_White_64h.png'
 import {ConnectionState} from "./index";
 import {Link} from "react-router-dom";
 
-const Connect = (props) => {
+const Connect = ({ defaultIp = "", defaultId = ""}) => {
+  const defaults = defaultId ? [] : defaultIp.split(/\/\//);
   const context = useContext(DeviceContext);
-  const [ip, setIp] = useState("");
-  const [protocol, setProtocol] = useState('ws:');
+  const [ip, setIp] = useState(defaults[1] || "");
+  const [id, setId] = useState(defaultId);
+  const [protocol, setProtocol] = useState(defaults[0] || 'ws:');
 
   const handleSubmit = (mode) => (e) => {
     e.preventDefault();
 
     if (mode === 'remote') {
-      const url = `wss://link.maustec.net/remote/${ip}`;
+      const url = `wss://link.maustec.net/remote/${id}`;
       console.log("Connecting to " + url);
       context.connect(url);
     } else {
@@ -55,7 +57,7 @@ const Connect = (props) => {
 
                   <Row style={{margin: '0rem -0.75rem 0 -0.75rem'}}>
                     <TextInput autoFocus s={12} disabled={context.state === ConnectionState.CONNECTING} type={"text"}
-                               label={"Device ID"} id={'device_id'} value={ip} onChange={e => setIp(e.target.value)}/>
+                               label={"Device ID"} id={'device_id'} value={id} onChange={e => setId(e.target.value)}/>
                   </Row>
 
                   <Button type={"submit"} disabled={context.state === ConnectionState.CONNECTING} style={{
@@ -65,7 +67,7 @@ const Connect = (props) => {
                 </div>
               </form>
             </Tab>
-            <Tab title="Local Network">
+            <Tab title="Local Network" active={!id}>
               <form onSubmit={handleSubmit('local')}>
                 <div className={'card-content'}>
                   {context.error && <div className={"error red-text text-darken-1"}>{context.error}</div>}

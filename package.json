@@ -33,7 +33,7 @@
   "scripts": {
     "start-react": "react-scripts start",
     "start-forge": "electron-forge start",
-    "start": "electron-forge start",
+    "start": "concurrently \"npm run start-react\" \"npm run start-forge\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "predeploy": "npm run build",
@@ -73,6 +73,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "concurrently": "^6.5.1",
     "electron": "^11.0.4",
     "gh-pages": "^3.1.0",
     "node-sass": "^5.0.0"
