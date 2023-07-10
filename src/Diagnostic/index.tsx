@@ -56,8 +56,8 @@ async function fetchFirmwareVersions(product: TProduct) : Promise<IFirmwareVersi
 
             return json.map((release: IGitHubAPIRelease) : IFirmwareVersion => ({
                 version: release.tag_name,
-                partitionURL: "https://us-central1-maustec-io.cloudfunctions.net/gh-release-embedded-bridge/update.partitions.bin", //release.assets.find(a => a.name.match(/\.partitions\.bin$/))?.browser_download_url,
-                binaryURL: "https://us-central1-maustec-io.cloudfunctions.net/gh-release-embedded-bridge/update.bin"//release.assets.find(a => a.name.match(/(?!:partitions)\.bin$/))?.browser_download_url
+                partitionURL: `https://us-central1-maustec-io.cloudfunctions.net/gh-release-embedded-bridge/${release.id}/update.partitions.bin`,
+                binaryURL: `https://us-central1-maustec-io.cloudfunctions.net/gh-release-embedded-bridge/${release.id}/update.bin`
             }));
 
         case "m1k":
@@ -185,15 +185,22 @@ const Diagnostic : React.FC<IDiagnosticProps> = () => {
     }
 
     return (
-        <div className={'content no-nav'}>
-            <ul id={"SideNav"} className="sidenav">
-            </ul>
+        <div className={'full-splash'} style={{minHeight: '100vh', position: 'relative', padding: '1px'}}>
+            <div className={"form"} style={{
+                display: 'block',
+                margin: '100px auto',
+                width: 350
+            }}>
+                <div className={"card"}>
+                    <div className={"card-content"}>
+                        <div className={"card-title"}>Select port:</div>
+                        <Button onClick={handlePortRequest} disabled={!!port}>Connect...</Button>
+                    </div>
+                </div>
 
-            <main style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-                <ol>
-                    <li>Select port: <Button onClick={handlePortRequest} disabled={!!port}>Connect...</Button></li>
-                    { port && <li>
-                        Select version:
+                { port && <div className={"card"}>
+                    <div className={"card-content"}>
+                        <div className={"card-title"}>Select version:</div>
                         <Select onChange={handleVersionSelect} value={currentVersion}>
                             {/*{ versions.length === 0 && <option disabled>Loading...</option> }*/}
                             <option disabled key={-1} value={""}>Select a Version...</option>
@@ -202,22 +209,26 @@ const Diagnostic : React.FC<IDiagnosticProps> = () => {
                                     { version.version }
                                 </option>) }
                         </Select>
-                    </li>}
+                    </div>
+                </div>}
 
-                    {currentVersion && <li>
-                        Flash Firmware: <Button onClick={handleFlashStart} disabled={flashProgress>=0||!port}>Flash Firmware</Button>
-                        <ProgressBar progress={flashProgress} />
-                    </li> }
+                {currentVersion && <div className={"card"}>
+                    <div className={"card-content"}>
+                        <div className={"card-title"}>Flash Firmware:</div>
+                        <Button onClick={handleFlashStart} disabled={flashProgress>=0||!port}>Flash Firmware</Button>
+                        <div style={{marginTop: "1.5rem"}}>
+                            <ProgressBar progress={flashProgress} />
+                        </div>
+                    </div>
+                </div> }
 
-                    {flashProgress === 100 && <li>
-                        Flash Complete. <Button onClick={handleDisconnect}>Disconnect</Button>
-                    </li>}
-                </ol>
-
-                {/*<pre>*/}
-                {/*    { JSON.stringify(versions, undefined, 2) }*/}
-                {/*</pre>*/}
-            </main>
+                {flashProgress === 100 && <div className={"card"}>
+                    <div className={"card-content"}>
+                        <div className={"card-title"}>Flash Complete.</div>
+                        <Button onClick={handleDisconnect}>Disconnect</Button>
+                    </div>
+                </div>}
+            </div>
         </div>
     )
 }

@@ -52,6 +52,11 @@ $sidenav-z: 999;
 
     .card {
       background-color: rgba(darken($primary-color-dark, 25%), 0.75);
+
+      .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
     }
   }
 }
