@@ -102,6 +102,11 @@ async function flashFirmware(port: SerialPort, versionData: IFirmwareVersion, pr
             data: data.partitionBin
         },
         {
+            name: "otadata",
+            offset: 0xe000,
+            data: new Uint8Array(0x2000),
+        },
+        {
             name: "ota0",
             offset: 0x10000,
             data: data.firmwareBin
@@ -131,6 +136,7 @@ async function flashFirmware(port: SerialPort, versionData: IFirmwareVersion, pr
                 await sleep(100);
             }
         } finally {
+            await loader.flashFinish(true);
             await loader.disconnect();
         }
     } finally {
