@@ -109,6 +109,7 @@ class DeviceProvider extends Component {
       mode: this.cbMode,
       dir: this.cbDir,
       page: this.cbPage,
+      setMode: this.cbMode, // v1
     };
   }
 
@@ -177,20 +178,24 @@ class DeviceProvider extends Component {
 
     readings.push(data);
 
+    // Legacy-ish for the mode included in the readings broadcast:
+    this.cbMode({mode: data.runMode});
+
     this.setReadingsState({
       readings: readings,
       lastReading: data
     });
   }
 
-  cbMode(data) {
+  cbMode({mode: modeStr, text}) {
+    let str = modeStr || text;
     let mode = "manual";
 
-    if (data.text.match(/auto|edging/i)) {
+    if (str.match(/auto|edging/i)) {
       mode = "automatic";
     }
 
-    this.setDeviceState({mode, modeDisplay: data.text});
+    this.setDeviceState({mode, modeDisplay: str});
   }
 
   /*
@@ -263,10 +268,9 @@ class DeviceProvider extends Component {
       console.warn(e);
     }
 
-    if (!doc.readings)
+    if (!doc.readings) {
       console.debug("handleWsMessage", doc, data);
 
-    if (!doc.readings) {
       let _ws_log = [...this.state.deviceContext._ws_log];
 
       if (_ws_log.length >= 100) {
@@ -292,7 +296,14 @@ class DeviceProvider extends Component {
             classes: 'red white-text',
             duration: 3000
           })
+        } else if (data.errno) {
+          toast({
+            html: `ERRNO ${data.errno}`,
+            classes: 'red white-text',
+            duration: 3000
+          })
         }
+
       }
 
       if (this.callbacks[cmd]) {
