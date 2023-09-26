@@ -67,7 +67,9 @@ class DeviceProvider extends Component {
     let defaultIP = (defaultProto + hashParts[0]);
     let defaultId = null;
 
-    if (hashParts[0] === 'link') {
+    if (typeof hashParts[0] === 'undefined') {
+      defaultIP = null;
+    } else if (hashParts[0] === 'link') {
       defaultId = hashParts[1];
       defaultIP = `wss://link.maustec.net/remote/${defaultId}`;
     } else if (hashParts[0] === 'wss') {
